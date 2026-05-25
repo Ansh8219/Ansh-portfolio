@@ -1,0 +1,40 @@
+import { useState, useCallback } from 'react'
+import { motion } from 'framer-motion'
+import { ThemeProvider } from './context/ThemeContext'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import ErrorBoundary from './components/ErrorBoundary'
+import WhatsAppButton from './components/WhatsAppButton'
+import IntroSplash from './components/IntroSplash'
+import Home from './pages/Home'
+import { CINEMATIC_EASE } from './motion/cinematic'
+
+function App() {
+  const [introComplete, setIntroComplete] = useState(false)
+  const handleIntroComplete = useCallback(() => setIntroComplete(true), [])
+
+  return (
+    <ErrorBoundary>
+      <ThemeProvider>
+        {!introComplete && <IntroSplash onComplete={handleIntroComplete} />}
+        {introComplete && (
+          <motion.div
+            className="page-root relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.65, ease: CINEMATIC_EASE }}
+          >
+            <Navbar />
+            <main>
+              <Home />
+            </main>
+            <Footer />
+            <WhatsAppButton />
+          </motion.div>
+        )}
+      </ThemeProvider>
+    </ErrorBoundary>
+  )
+}
+
+export default App
