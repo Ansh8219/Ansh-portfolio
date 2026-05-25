@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { ThemeProvider } from './context/ThemeContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -32,6 +33,7 @@ function App() {
             <WhatsAppButton />
           </motion.div>
         )}
+        <SpeedInsights />
       </ThemeProvider>
     </ErrorBoundary>
   )
