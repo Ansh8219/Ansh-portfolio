@@ -13,12 +13,12 @@ function HeroContent() {
     <div className="w-full max-w-none">
       <p className="hero-eyebrow">NorthVaultStudios · AI-Driven Digital Studio</p>
 
-      <h1 className="hero-display hero-display--row mb-6 sm:mb-8">
+      <h1 className="hero-display hero-display--row mb-5 sm:mb-7">
         <span>Digital growth,&nbsp;</span>
         <span className="hero-display-accent">built to scale.</span>
       </h1>
 
-      <p className="hero-lead mb-6 w-full max-w-2xl sm:mb-8">
+      <p className="hero-lead mb-5 w-full max-w-2xl sm:mb-7">
         Marketing, web, apps, and custom software—one team, one roof, built for brands that want to
         move fast without sacrificing quality.
       </p>
@@ -37,7 +37,7 @@ function HeroContent() {
         ]}
         linkHref="#contact"
         linkLabel="clients"
-        className="mb-8 w-full flex-col items-start gap-4 px-0 py-0 text-[var(--text-primary)] sm:mb-10 sm:flex-row sm:items-center sm:gap-6"
+        className="mb-0 w-full flex-col items-start gap-4 px-0 py-0 text-[var(--text-primary)] sm:flex-row sm:items-center sm:gap-6"
       />
     </div>
   )

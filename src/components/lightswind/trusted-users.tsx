@@ -44,9 +44,12 @@ export const TrustedUsers: React.FC<TrustedUsersProps> = ({
             <img
               src={src}
               alt={`Avatar ${i + 1}`}
+              width={80}
+              height={80}
               className="w-full h-full object-cover"
-              loading="lazy" // Add lazy loading
-              decoding="async" // Suggest asynchronous decoding
+              loading="eager"
+              decoding="async"
+              fetchPriority="low"
             />
           </div>
         ))}

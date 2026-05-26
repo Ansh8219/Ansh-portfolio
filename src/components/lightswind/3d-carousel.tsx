@@ -1,4 +1,5 @@
-import { useRef, useEffect, useState, type TouchEvent } from 'react'
+import { useRef, useEffect, useState, type TouchEvent, type CSSProperties } from 'react'
+import { webpFromJpeg } from '../../utils/preloadImages'
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { Card, CardContent } from './card'
 import { useIsMobile } from '../hooks/use-mobile'
@@ -33,8 +34,9 @@ const ThreeDCarousel = ({
   const carouselRef = useRef<HTMLDivElement>(null)
   const [isInView, setIsInView] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
-  const [touchStart, setTouchStart] = useState<number | null>(null)
-  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  // Touch tracking uses refs to avoid re-rendering on every touchmove (mobile perf).
+  const touchStartRef = useRef<number | null>(null)
+  const touchEndRef = useRef<number | null>(null)
   const isMobile = useIsMobile()
   const minSwipeDistance = 50
 
@@ -60,16 +62,18 @@ const ThreeDCarousel = ({
 
   const onTouchStart = (e: TouchEvent) => {
     if (!isMobileSwipe) return
-    setTouchStart(e.targetTouches[0].clientX)
-    setTouchEnd(null)
+    touchStartRef.current = e.targetTouches[0].clientX
+    touchEndRef.current = null
   }
 
   const onTouchMove = (e: TouchEvent) => {
     if (!isMobileSwipe) return
-    setTouchEnd(e.targetTouches[0].clientX)
+    touchEndRef.current = e.targetTouches[0].clientX
   }
 
   const onTouchEnd = () => {
+    const touchStart = touchStartRef.current
+    const touchEnd = touchEndRef.current
     if (!isMobileSwipe || touchStart === null || touchEnd === null) return
     const distance = touchStart - touchEnd
     if (distance > minSwipeDistance) {
@@ -77,8 +81,8 @@ const ThreeDCarousel = ({
     } else if (distance < -minSwipeDistance) {
       setActive((prev) => (prev - 1 + items.length) % items.length)
     }
-    setTouchStart(null)
-    setTouchEnd(null)
+    touchStartRef.current = null
+    touchEndRef.current = null
   }
 
   const getCardAnimationClass = (index: number) => {
@@ -92,6 +96,22 @@ const ThreeDCarousel = ({
     return 'scale-90 opacity-0 pointer-events-none'
   }
 
+  const cardImageStyle = (imageUrl: string): CSSProperties => {
+    const webp = /\.jpe?g$/i.test(imageUrl) ? webpFromJpeg(imageUrl) : null
+    if (webp) {
+      return {
+        backgroundImage: `image-set(url("${webp}") type("image/webp"), url("${imageUrl}") type("image/jpeg"))`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }
+    }
+    return {
+      backgroundImage: `url(${imageUrl})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }
+  }
+
   if (!items.length) return null
 
   return (
@@ -102,7 +122,8 @@ const ThreeDCarousel = ({
     >
       <div className="w-full min-w-0 max-w-none px-0">
         <div
-          className="relative h-[min(380px,72vh)] overflow-hidden sm:h-[460px] md:h-[580px] lg:h-[600px]"
+          className="relative h-[min(380px,72vh)] overflow-hidden touch-pan-y sm:h-[460px] md:h-[580px] lg:h-[600px]"
+          style={{ touchAction: isMobileSwipe ? 'pan-y pinch-zoom' : 'auto' }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
           onTouchStart={onTouchStart}
@@ -114,7 +135,7 @@ const ThreeDCarousel = ({
             {items.map((item, index) => (
               <div
                 key={item.id}
-                className={`absolute top-0 w-[calc(100%-1.5rem)] max-w-lg transform transition-all duration-500 ease-out sm:w-[90vw] sm:max-w-xl md:max-w-2xl lg:max-w-3xl ${getCardAnimationClass(index)}`}
+                className={`absolute top-0 w-[calc(100%-1.5rem)] max-w-lg transform-gpu transition-[transform,opacity] duration-500 ease-out sm:w-[min(90vw,36rem)] sm:max-w-xl md:max-w-2xl lg:max-w-3xl ${getCardAnimationClass(index)}`}
               >
                 <Card
                   bordered
@@ -123,12 +144,8 @@ const ThreeDCarousel = ({
                   style={{ height: cardHeight }}
                 >
                   <div
-                    className="relative flex h-36 items-center justify-center overflow-hidden p-4 sm:h-44 sm:p-5 md:h-48 md:p-6"
-                    style={{
-                      backgroundImage: `url(${item.imageUrl})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
+                    className="relative flex h-36 items-center justify-center overflow-hidden bg-[var(--bg-secondary)] p-4 sm:h-44 sm:p-5 md:h-48 md:p-6"
+                    style={cardImageStyle(item.imageUrl)}
                   >
                     <div className="absolute inset-0 bg-black/55" aria-hidden />
                     <div className="relative z-10 text-center text-white">
@@ -189,7 +206,7 @@ const ThreeDCarousel = ({
             <>
               <button
                 type="button"
-                className="absolute left-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)]/90 text-[var(--text-primary)] shadow-md backdrop-blur-md transition-all hover:scale-110 hover:border-[var(--text-accent)] hover:text-[var(--text-accent)] sm:left-4"
+                className="absolute left-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)]/95 text-[var(--text-primary)] shadow-md transition-transform hover:scale-110 hover:border-[var(--text-accent)] hover:text-[var(--text-accent)] sm:left-4"
                 onClick={() => setActive((prev) => (prev - 1 + items.length) % items.length)}
                 aria-label="Previous project"
               >

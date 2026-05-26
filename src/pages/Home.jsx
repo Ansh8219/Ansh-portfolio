@@ -1,20 +1,19 @@
-import { useRef, useState, useCallback, memo, useEffect } from 'react'
+import { useRef, useState, useCallback, memo } from 'react'
 import { motion, useSpring, useMotionValue } from 'framer-motion'
-import { HiOutlineGlobeAlt, HiOutlineComputerDesktop, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/hi2'
+import { HiOutlineGlobeAlt, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/hi2'
 import {
   FaMobileAlt,
   FaBullhorn,
   FaPaintBrush,
   FaCloud,
   FaLinkedin,
-  FaTwitter,
   FaInstagram,
-  FaFacebook,
 } from 'react-icons/fa'
 import { scrollToSection } from '../utils/scrollToSection'
 import ScrollVerticalStack from '../components/ScrollVerticalStack'
 import FeaturedWorkCarousel from '../components/FeaturedWorkCarousel'
 import TestimonialsMarquee from '../components/TestimonialsMarquee'
+import BrandedEmail, { MAILTO } from '../components/BrandedEmail'
 import HeroContent from '../components/HeroContent'
 import HeroTicker from '../components/HeroTicker'
 import ServicesShowcase from '../components/ServicesShowcase'
@@ -27,12 +26,17 @@ import {
   staggerContainer as scrollStaggerContainer,
   staggerItem as scrollStaggerItem,
 } from '../components/ScrollReveal'
-
-const EASE = [0.25, 0.1, 0.25, 1]
+import {
+  CINEMATIC_EASE,
+  UI_HOVER_SCALE,
+  UI_TAP_SCALE,
+  UI_HOVER_TRANSITION,
+  MOTION_DURATION,
+} from '../motion/cinematic'
+import { usePrefersFinePointer } from '../hooks/usePrefersFinePointer'
+import ResponsivePicture from '../components/ResponsivePicture'
 const SPRING_CONFIG = { stiffness: 75, damping: 18 }
-const SPRING_WHY = { stiffness: 70, damping: 18 }
 const SPRING_TRANSITION = { type: 'spring', stiffness: 75, damping: 18 }
-const SPRING_WHY_TRANSITION = { type: 'spring', stiffness: 70, damping: 18 }
 
 const SERVICES = [
   {
@@ -136,24 +140,27 @@ const TESTIMONIALS = [
     title: 'CEO',
     company: 'TechStart Inc.',
     initials: 'SJ',
+    outcome: '3× organic traffic · 6 months',
     content:
-      'NVS transformed our digital presence. Their innovative approach and attention to detail exceeded our expectations.',
+      'NVS rebuilt our funnel end-to-end. We saw measurable lift in leads within the first quarter—fast, focused, and obsessively polished.',
   },
   {
     name: 'Michael Chen',
     title: 'Founder',
     company: 'InnovateLab',
     initials: 'MC',
+    outcome: '4.8★ app rating · launch in 10 weeks',
     content:
-      'Working with NVS was a game-changer. They delivered a stunning mobile app that our users love.',
+      'They shipped a native-feel product our users actually keep. Clear communication, sharp UX, and zero drama at launch.',
   },
   {
     name: 'Emily Rodriguez',
     title: 'Marketing Director',
     company: 'BrandCo',
     initials: 'ER',
+    outcome: 'Unified brand system · 12 markets',
     content:
-      'The team at NVS understands branding like no other. Our new identity perfectly captures our vision.',
+      'Our rebrand finally feels premium and consistent everywhere. NVS nailed the story and the execution.',
   },
 ]
 
@@ -165,62 +172,6 @@ const WHY_CHOOSE_US = [
 ]
 
 const WHY_LOOP_WORDS = ['Innovation', 'Expertise', 'Partnership', 'Velocity']
-
-const WHY_ITEM_VARIANTS = [
-  {
-    hidden: { opacity: 0, x: -120, rotateY: 25, y: 0, rotateX: 0 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      rotateY: 0,
-      y: 0,
-      rotateX: 0,
-      transition: SPRING_WHY_TRANSITION,
-    },
-  },
-  {
-    hidden: { opacity: 0, y: 100, rotateX: 20, x: 0, rotateY: 0 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      x: 0,
-      rotateY: 0,
-      transition: SPRING_WHY_TRANSITION,
-    },
-  },
-  {
-    hidden: { opacity: 0, y: 100, rotateX: 20, x: 0, rotateY: 0 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      x: 0,
-      rotateY: 0,
-      transition: SPRING_WHY_TRANSITION,
-    },
-  },
-  {
-    hidden: { opacity: 0, x: 120, rotateY: -25, y: 0, rotateX: 0 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      rotateY: 0,
-      y: 0,
-      rotateX: 0,
-      transition: SPRING_WHY_TRANSITION,
-    },
-  },
-]
-
-const TESTIMONIAL_CARD_VARIANTS = {
-  hidden: { opacity: 0, rotateY: 60 },
-  visible: (i) => ({
-    opacity: 1,
-    rotateY: 0,
-    transition: { type: 'spring', stiffness: 75, damping: 18, delay: i * 0.2 },
-  }),
-}
 
 const WHO_WE_ARE_P1 =
   'NorthVaultStudios is a futuristic digital agency at the forefront of innovation. We specialize in creating exceptional digital experiences that blend cutting-edge technology with stunning design.'
@@ -234,29 +185,23 @@ const WHO_WE_ARE_HEADING_WORDS = [
   { word: 'Are', breakAfter: false },
 ]
 
-const staggerContainer = {
+const heroStagger = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.14 },
   },
 }
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.75, ease: EASE },
+    transition: { duration: 0.6, ease: CINEMATIC_EASE },
   },
 }
 
 function WhoWeAreSection() {
-  useEffect(() => {
-    const img = new Image()
-    img.decoding = 'async'
-    img.src = '/homePageImage.jpg'
-  }, [])
-
   const bodyLines = [WHO_WE_ARE_P1, WHO_WE_ARE_P2]
 
   return (
@@ -292,13 +237,14 @@ function WhoWeAreSection() {
           className="h-[min(36vh,280px)] w-full overflow-hidden rounded-2xl sm:h-[min(42vh,380px)] lg:h-[min(52vh,460px)]"
           variants={revealUp}
         >
-          <img
+          <ResponsivePicture
             src="/homePageImage.jpg"
             alt="NorthVaultStudios team and work"
-            width={1200}
-            height={500}
-            loading="lazy"
-            decoding="async"
+            width={1400}
+            height={933}
+            loading="eager"
+            fetchPriority="high"
+            sizes="(max-width: 1024px) 100vw, 50vw"
             className="h-full w-full object-cover"
           />
         </motion.div>
@@ -307,46 +253,72 @@ function WhoWeAreSection() {
   )
 }
 
-function usePreloadImages(urls) {
-  useEffect(() => {
-    urls.forEach((src) => {
-      const img = new Image()
-      img.decoding = 'async'
-      img.src = src
-    })
-  }, [urls])
-}
-
 function MagneticSubmitButton({ children, className = '' }) {
+  const canMagnet = usePrefersFinePointer()
   const ref = useRef(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const smoothX = useSpring(x, SPRING_CONFIG)
   const smoothY = useSpring(y, SPRING_CONFIG)
 
-  const handleMouseMove = (e) => {
+  // Avoid forcing layout on every pointer event. Read the rect at most once per frame.
+  const rectRef = useRef(null)
+  const rafRef = useRef(0)
+  const lastEventRef = useRef(null)
+
+  const updateRect = useCallback(() => {
     if (!ref.current) return
-    const rect = ref.current.getBoundingClientRect()
+    rectRef.current = ref.current.getBoundingClientRect()
+  }, [])
+
+  const flushMove = useCallback(() => {
+    rafRef.current = 0
+    const e = lastEventRef.current
+    const rect = rectRef.current
+    if (!e || !rect) return
     const centerX = rect.left + rect.width / 2
     const centerY = rect.top + rect.height / 2
     const offsetX = ((e.clientX - centerX) / rect.width) * 16
     const offsetY = ((e.clientY - centerY) / rect.height) * 16
     x.set(Math.max(-8, Math.min(8, offsetX)))
     y.set(Math.max(-8, Math.min(8, offsetY)))
-  }
+  }, [x, y])
+
+  const handleMouseEnter = useCallback(() => {
+    if (!canMagnet) return
+    updateRect()
+  }, [canMagnet, updateRect])
+
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (!canMagnet || !ref.current) return
+      lastEventRef.current = e
+      if (!rectRef.current) updateRect()
+      if (rafRef.current) return
+      rafRef.current = window.requestAnimationFrame(flushMove)
+    },
+    [canMagnet, flushMove, updateRect],
+  )
 
   const handleMouseLeave = () => {
     x.set(0)
     y.set(0)
+    lastEventRef.current = null
+    rectRef.current = null
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = 0
+    }
   }
 
   return (
     <motion.button
       ref={ref}
       type="submit"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ x: smoothX, y: smoothY }}
+      onMouseEnter={canMagnet ? handleMouseEnter : undefined}
+      onMouseMove={canMagnet ? handleMouseMove : undefined}
+      onMouseLeave={canMagnet ? handleMouseLeave : undefined}
+      style={canMagnet ? { x: smoothX, y: smoothY } : undefined}
       variants={{
         hidden: { opacity: 0, scale: 0.8 },
         visible: {
@@ -358,8 +330,12 @@ function MagneticSubmitButton({ children, className = '' }) {
       initial="hidden"
       whileInView="visible"
       viewport={SCROLL_VIEWPORT_LOOSE}
-      whileHover={{ scale: 1.05, backgroundColor: '#ff8533' }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{
+        scale: UI_HOVER_SCALE,
+        backgroundColor: '#ff8533',
+        transition: UI_HOVER_TRANSITION,
+      }}
+      whileTap={{ scale: UI_TAP_SCALE, transition: UI_HOVER_TRANSITION }}
       className={className}
     >
       {children}
@@ -382,26 +358,16 @@ function HeroPills() {
 
 const Home = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
-  usePreloadImages([
-    ...SERVICES.map((s) => s.image),
-    ...FEATURED_PROJECTS.map((p) => p.image),
-  ])
-
+  const [formStatus, setFormStatus] = useState('idle')
   const handleChange = useCallback((e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }, [])
 
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault()
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Form submitted:', formData)
-      }
-      alert('Thank you for your message! We will get back to you soon.')
-      setFormData({ name: '', email: '', message: '' })
-    },
-    [formData],
-  )
+  const handleSubmit = useCallback((e) => {
+    e.preventDefault()
+    setFormStatus('success')
+    setFormData({ name: '', email: '', message: '' })
+  }, [])
 
   const scrollToContact = () => scrollToSection('contact', 80)
 
@@ -411,29 +377,30 @@ const Home = () => {
       <section
         id="hero"
         className="hero-section page-hero-pad relative min-h-[100dvh] overflow-hidden bg-[var(--bg-primary)]"
-        style={{ perspective: 1200 }}
+        style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
       >
         <motion.div
-          className="hero-readable hero-pad relative z-10 flex min-h-[calc(100dvh-max(6rem,env(safe-area-inset-top,0px)+5.5rem))] w-full max-w-[100vw] flex-col pb-10 pt-4 sm:pb-14"
-          variants={staggerContainer}
+          className="hero-readable hero-pad relative z-10 flex min-h-[calc(100dvh-max(6rem,env(safe-area-inset-top,0px)+5.5rem))] w-full min-w-0 flex-col pb-10 pt-4 sm:pb-14"
+          variants={heroStagger}
           initial="hidden"
           animate="visible"
         >
-          <div className="flex w-full flex-1 flex-col justify-center">
-            <motion.div variants={fadeUp}>
+          <div className="hero-stage flex w-full flex-1 flex-col justify-center">
+            <motion.div variants={fadeUp} className="hero-headline">
               <HeroContent />
             </motion.div>
 
-            <motion.button
-              type="button"
-              onClick={scrollToContact}
-              variants={fadeUp}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="btn-primary w-full max-w-xs sm:w-auto"
-            >
-              Start Now
-            </motion.button>
+            <motion.div variants={fadeUp} className="hero-cta-wrap mt-8 sm:mt-10">
+              <motion.button
+                type="button"
+                onClick={scrollToContact}
+                whileHover={{ scale: UI_HOVER_SCALE, transition: UI_HOVER_TRANSITION }}
+                whileTap={{ scale: UI_TAP_SCALE, transition: UI_HOVER_TRANSITION }}
+                className="btn-primary btn-primary--hero w-full max-w-xs sm:w-auto"
+              >
+                Start Now
+              </motion.button>
+            </motion.div>
           </div>
 
           <div className="relative mt-auto w-full">
@@ -471,9 +438,6 @@ const Home = () => {
               <motion.p
                 className="editorial-body mt-4 max-w-2xl text-sm md:mt-5 md:text-base"
                 variants={revealUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={SCROLL_VIEWPORT}
               >
                 Selected projects across web, mobile, brand, and cloud—built for growth and long-term scale.
               </motion.p>
@@ -520,10 +484,10 @@ const Home = () => {
                 <motion.article
                   key={item.title}
                   variants={scrollStaggerItem}
-                  className="why-choose-card group relative overflow-hidden rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] p-6 backdrop-blur-sm transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-[#ff6b00]/50 hover:shadow-[0_12px_40px_rgba(255,107,0,0.12)] md:p-8"
+                  className="why-choose-card group relative overflow-hidden rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] p-6 transition-[border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-[#ff6b00]/50 hover:shadow-[0_12px_32px_var(--glass-glow)] active:scale-[0.99] md:p-8"
                 >
                   <div
-                    className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#ff6b00]/10 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+                    className="why-choose-card-glow pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full"
                     aria-hidden
                   />
                   <span className="mb-4 block font-mono text-[clamp(1.75rem,5vw,2.5rem)] font-black leading-none text-[#ff6b00]">
@@ -548,18 +512,24 @@ const Home = () => {
             whileInView="visible"
             viewport={SCROLL_VIEWPORT}
           >
+            <p className="mb-2 text-center text-[10px] uppercase tracking-[0.35em] text-secondary md:text-xs">
+              Client outcomes
+            </p>
             <WordReveal
               as="h2"
-              className="section-heading mb-6 text-center sm:mb-8"
+              className="section-heading mb-3 text-center sm:mb-4"
               text="What Our Clients Say"
             />
+            <p className="editorial-body mx-auto mb-6 max-w-xl text-center text-sm sm:mb-8">
+              Real teams. Measurable results. Built to last.
+            </p>
             <motion.div variants={revealUp}>
               <TestimonialsMarquee testimonials={TESTIMONIALS} />
             </motion.div>
           </motion.div>
         </section>
 
-        <section id="contact" className="stack-section w-full bg-[var(--bg-primary)]">
+        <section id="contact" className="contact-section stack-section w-full bg-[var(--bg-primary)]">
           <motion.div
             className="site-shell w-full"
             variants={scrollStaggerContainer}
@@ -567,6 +537,11 @@ const Home = () => {
             whileInView="visible"
             viewport={SCROLL_VIEWPORT}
           >
+            <ul className="contact-trust mb-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] uppercase tracking-[0.28em] text-secondary sm:mb-10">
+              <li>Reply within 24h</li>
+              <li>Chandigarh, India</li>
+              <li>NDA on request</li>
+            </ul>
             <div className="text-center">
               <LineReveal
                 as="h2"
@@ -574,14 +549,11 @@ const Home = () => {
                 lines={["Let's Build Something"]}
               />
               <motion.a
-                href="mailto:hello@northvaultstudios.com"
-                className="mt-4 inline-block break-all text-lg font-light tracking-tight text-[#ff6b00] transition-opacity hover:opacity-80 md:mt-5 md:text-2xl"
+                href={MAILTO}
+                className="mt-4 inline-block break-all text-lg font-light tracking-tight transition-opacity hover:opacity-80 focus-visible:opacity-90 md:mt-5 md:text-2xl"
                 variants={revealUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={SCROLL_VIEWPORT}
               >
-                hello@northvaultstudios.com
+                <BrandedEmail />
               </motion.a>
             </div>
 
@@ -593,6 +565,11 @@ const Home = () => {
               onSubmit={handleSubmit}
               className="contact-form w-full max-w-xl space-y-5 text-left sm:space-y-6"
             >
+              {formStatus === 'success' ? (
+                <p className="form-feedback form-feedback--success" role="status" aria-live="polite">
+                  Message received — we&apos;ll be in touch within one business day.
+                </p>
+              ) : null}
               {[
                   { id: 'name', label: 'Name', type: 'text', placeholder: 'Your Name' },
                   { id: 'email', label: 'Email', type: 'email', placeholder: 'your.email@example.com' },
@@ -609,7 +586,7 @@ const Home = () => {
                       onChange={handleChange}
                       required
                       placeholder={field.placeholder}
-                      className="w-full rounded-none border-0 border-b border-[var(--glass-border)] bg-transparent py-3 text-[var(--text-primary)] placeholder:text-secondary transition-colors focus:border-[#ff6b00] focus:outline-none"
+                      className="w-full rounded-none border-0 border-b border-[var(--glass-border)] bg-transparent py-3 text-[var(--text-primary)] placeholder:text-secondary transition-colors focus:border-[var(--text-accent)] focus:outline-none"
                     />
                   </div>
                 ))}
@@ -625,7 +602,7 @@ const Home = () => {
                     required
                     rows={4}
                     placeholder="Tell us about your project..."
-                    className="w-full resize-none rounded-none border-0 border-b border-[var(--glass-border)] bg-transparent py-3 text-[var(--text-primary)] placeholder:text-secondary transition-colors focus:border-[#ff6b00] focus:outline-none"
+                    className="w-full resize-none rounded-none border-0 border-b border-[var(--glass-border)] bg-transparent py-3 text-[var(--text-primary)] placeholder:text-secondary transition-colors focus:border-[var(--text-accent)] focus:outline-none"
                   />
                 </div>
                 <MagneticSubmitButton className="mt-2 flex w-full items-center justify-center rounded-full bg-[#ff6b00] px-10 py-3.5 text-sm font-medium uppercase tracking-[0.15em] text-white transition-colors sm:w-auto">
@@ -636,11 +613,11 @@ const Home = () => {
               <div className="flex w-full max-w-none flex-col items-center gap-6 text-center sm:max-w-sm sm:gap-8 lg:w-auto lg:max-w-none lg:items-start lg:pt-2 lg:text-left">
                 <div className="space-y-5">
                   <a
-                    href="tel:+15551234567"
+                    href="tel:+918219268903"
                     className="flex items-center justify-center gap-3 text-secondary transition-colors hover:text-[var(--text-primary)] lg:justify-start"
                   >
                     <HiOutlinePhone className="shrink-0 text-xl text-[#ff6b00]" />
-                    <span>+1 (555) 123-4567</span>
+                    <span>+91 8219268903</span>
                   </a>
                   <div className="flex items-center justify-center gap-3 text-secondary lg:justify-start">
                     <HiOutlineMapPin className="shrink-0 text-xl text-[#ff6b00]" />
@@ -649,14 +626,12 @@ const Home = () => {
                 </div>
                 <div className="flex justify-center gap-5 lg:justify-start">
                   {[
-                    { icon: FaLinkedin, url: 'https://www.linkedin.com/company/northvaultstudios', label: 'LinkedIn' },
-                    { icon: FaTwitter, url: null, label: 'Twitter' },
+                    { icon: FaLinkedin, url: 'https://www.linkedin.com/company/northvaultstudios/', label: 'LinkedIn' },
                     {
                       icon: FaInstagram,
-                      url: 'https://www.instagram.com/northvaultstudio?igsh=MTNtMmlkZTRicWZ1Yw%3D%3D&utm_source=qr',
+                      url: 'https://www.instagram.com/northvaultstudios?igsh=MWVhejFtcjd4Nmo2aQ%3D%3D&utm_source=qr',
                       label: 'Instagram',
                     },
-                    { icon: FaFacebook, url: null, label: 'Facebook' },
                   ].map(({ icon: Icon, url, label }) =>
                     url ? (
                       <a

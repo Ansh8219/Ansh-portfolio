@@ -10,16 +10,24 @@ export default function LenisProvider({ children }) {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     if (reducedMotion.matches) return
 
+    // Smooth scrolling libraries can feel jittery on mobile/touch because native
+    // momentum + syncTouch can fight the browser compositor. Keep desktop smooth,
+    // but fall back to native scrolling for coarse pointers / touch devices.
+    const coarsePointer = window.matchMedia('(pointer: coarse)')
+    const noHover = window.matchMedia('(hover: none)')
+    if (coarsePointer.matches || noHover.matches) return
+
     const lenis = new Lenis({
-      lerp: 0.14,
-      duration: 1.1,
+      lerp: 0.16,
+      duration: 1,
       smoothWheel: true,
       wheelMultiplier: 1.05,
       touchMultiplier: 1,
       syncTouch: true,
       syncTouchLerp: 0.1,
       autoRaf: true,
-      overscroll: true,
+      // Prevent overscroll bounce from triggering extra work/layout during inertial scroll.
+      overscroll: false,
     })
 
     lenisRef.current = lenis

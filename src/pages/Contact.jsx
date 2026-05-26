@@ -1,6 +1,7 @@
 import { useState, useCallback, memo } from 'react'
 import { motion } from 'framer-motion'
 import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin, HiOutlineMap } from 'react-icons/hi2'
+import BrandedEmail, { MAILTO } from '../components/BrandedEmail'
 import { SCROLL_VIEWPORT } from '../components/ScrollReveal'
 
 const Contact = memo(() => {
@@ -20,9 +21,6 @@ const Contact = memo(() => {
   const handleSubmit = useCallback((e) => {
     e.preventDefault()
     // Handle form submission here
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Form submitted:', formData)
-    }
     // TODO: Replace with actual form submission API call
     alert('Thank you for your message! We will get back to you soon.')
     setFormData({ name: '', email: '', message: '' })
@@ -32,14 +30,14 @@ const Contact = memo(() => {
     {
       icon: HiOutlineEnvelope,
       title: 'Email',
-      content: 'hello@northvaultstudios.com',
-      link: 'mailto:hello@northvaultstudios.com',
+      content: <BrandedEmail />,
+      link: MAILTO,
     },
     {
       icon: HiOutlinePhone,
       title: 'Phone',
-      content: '+1 (555) 123-4567',
-      link: 'tel:+15551234567',
+      content: '+91 8219268903',
+      link: 'tel:+918219268903',
     },
     {
       icon: HiOutlineMapPin,
@@ -187,7 +185,7 @@ const Contact = memo(() => {
                         viewport={SCROLL_VIEWPORT}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         whileHover={{ scale: 1.05, x: 10 }}
-                        className="flex items-start space-x-4 glass rounded-xl p-6 glow-hover block"
+                        className="flex items-start space-x-4 glass rounded-xl p-6 glow-hover"
                       >
                         <div>
                           <info.icon className="text-4xl text-primary" />
@@ -244,7 +242,7 @@ const Contact = memo(() => {
               className="inline-block"
             >
               <a
-                href="mailto:hello@northvaultstudios.com"
+                href={MAILTO}
                 className="inline-block px-8 py-4 rounded-lg font-semibold hover:shadow-2xl transition-all"
                 style={{ 
                   backgroundColor: 'var(--text-accent)',

@@ -6,7 +6,7 @@ export function scrollToSection(id, offset = 80) {
 
   const lenis = getLenisInstance()
   if (lenis) {
-    lenis.scrollTo(el, { offset: -offset, duration: 1.2 })
+    lenis.scrollTo(el, { offset: -offset, duration: 1 })
     return
   }
 

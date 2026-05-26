@@ -11,11 +11,18 @@ function buildSeamlessLoop(items, minPerHalf = 12) {
 
 function TestimonialCard({ testimonial }) {
   return (
-    <article className="testimonial-marquee-card glass-card flex shrink-0 flex-col rounded-2xl border border-[var(--glass-border)] p-6 md:p-7">
-      <span className="mb-3 block font-serif text-4xl leading-none text-[#ff6b00] select-none md:text-5xl" aria-hidden>
+    <article className="testimonial-marquee-card flex shrink-0 flex-col rounded-2xl border border-[var(--glass-border)] bg-[var(--glass-bg)] p-6 md:p-7">
+      {testimonial.outcome ? (
+        <p className="testimonial-outcome mb-3 text-[10px] font-medium uppercase tracking-[0.22em] text-[#ff6b00]">
+          {testimonial.outcome}
+        </p>
+      ) : null}
+      <span className="mb-2 block font-serif text-3xl leading-none text-[#ff6b00]/80 select-none md:text-4xl" aria-hidden>
         &ldquo;
       </span>
-      <p className="editorial-body mb-5 flex-1 text-sm leading-relaxed md:text-base">{testimonial.content}</p>
+      <p className="mb-5 flex-1 text-sm leading-relaxed text-[var(--text-primary)]/90 md:text-base">
+        {testimonial.content}
+      </p>
       <div className="mb-4 h-px bg-[var(--glass-border)]" />
       <div className="flex items-center gap-3">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff6b00] text-sm font-semibold text-white md:h-11 md:w-11">

@@ -1,12 +1,15 @@
 import { memo, useState, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { cn } from './lib/utils'
+import { CINEMATIC_EASE, MOTION_DURATION } from '../motion/cinematic'
 import { useMediaQuery } from '../hooks/useMediaQuery'
+import ResponsivePicture from './ResponsivePicture'
 
 const GRID_SIZE = 3
 const CELL_COUNT = GRID_SIZE * GRID_SIZE
 
 function ServicesBento({ services, className }) {
+  const prefersReducedMotion = useReducedMotion()
   const isMobile = useMediaQuery('(max-width: 767px)')
   const [activeRow, setActiveRow] = useState(1)
   const [activeCol, setActiveCol] = useState(1)
@@ -44,23 +47,25 @@ function ServicesBento({ services, className }) {
                 key={service.name}
                 type="button"
                 className={cn(
-                  'services-bento-mobile-card group relative w-full overflow-hidden rounded-xl border text-left shadow-lg sm:rounded-2xl',
+                  'services-bento-mobile-card interactive-tap group relative w-full overflow-hidden rounded-xl border text-left shadow-lg transition-[opacity,transform,box-shadow] duration-200 sm:rounded-2xl',
                   'border-[var(--glass-border)]',
                   isActive
                     ? 'ring-2 ring-[#ff6b00]/55'
                     : 'opacity-90',
+                  'active:scale-[0.99]',
                 )}
                 onClick={() => setMobileActive(i)}
                 aria-expanded={isActive}
                 aria-label={service.title}
               >
-                <img
+                <ResponsivePicture
                   src={service.image}
                   alt=""
-                  width={800}
-                  height={600}
-                  loading={i < 2 ? 'eager' : 'lazy'}
-                  decoding="async"
+                  width={960}
+                  height={720}
+                  loading={i < 3 ? 'eager' : 'lazy'}
+                  fetchPriority={i === 0 ? 'high' : undefined}
+                  sizes="(max-width: 767px) 100vw, 33vw"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div
@@ -102,12 +107,16 @@ function ServicesBento({ services, className }) {
   }
 
   return (
-    <div className={cn('flex w-full items-center justify-center', className)}>
+    <div className={cn('flex w-full min-w-0 items-center justify-center', className)}>
       <motion.div
-        className="services-bento-grid grid h-[min(68vh,780px)] w-full max-w-none gap-2 sm:gap-3 md:gap-4"
+        className="services-bento-grid grid h-[min(68vh,780px)] w-full min-w-0 max-w-full gap-2 sm:gap-3 md:gap-4"
         animate={{ gridTemplateRows, gridTemplateColumns }}
         onMouseLeave={resetActive}
-        transition={{ type: 'spring', stiffness: 300, damping: 30, mass: 0.8 }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0.2 }
+            : { type: 'spring', stiffness: 300, damping: 30, mass: 0.8 }
+        }
       >
         {cells.map((service, i) => {
           const row = Math.floor(i / GRID_SIZE)
@@ -146,13 +155,13 @@ function ServicesBento({ services, className }) {
               role="button"
               aria-label={service.title}
             >
-              <img
+              <ResponsivePicture
                 src={service.image}
                 alt=""
-                width={800}
-                height={600}
-                loading={i < 4 ? 'eager' : 'lazy'}
-                decoding="async"
+                width={960}
+                height={720}
+                loading="eager"
+                sizes="33vw"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div
@@ -188,7 +197,7 @@ function ServicesBento({ services, className }) {
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.35, delay: 0.05 }}
+                    transition={{ duration: MOTION_DURATION, ease: CINEMATIC_EASE, delay: 0.04 }}
                     className="mt-3 space-y-3"
                   >
                     <p className="text-xs leading-relaxed text-white/80 sm:text-sm">{service.description}</p>
@@ -207,9 +216,9 @@ function ServicesBento({ services, className }) {
               </div>
 
               {isActive ? (
-                <motion.div
-                  layoutId="services-bento-glow"
+                <div
                   className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-[#ff6b00]/55"
+                  aria-hidden
                 />
               ) : null}
             </motion.div>

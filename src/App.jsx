@@ -1,4 +1,6 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { preloadImages } from './utils/preloadImages'
+import { SITE_PRELOAD_PATHS } from './constants/siteImages'
 import { motion } from 'framer-motion'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { ThemeProvider } from './context/ThemeContext'
@@ -14,6 +16,10 @@ function App() {
   const [introComplete, setIntroComplete] = useState(false)
   const handleIntroComplete = useCallback(() => setIntroComplete(true), [])
 
+  useEffect(() => {
+    preloadImages(SITE_PRELOAD_PATHS, { priority: 'high' })
+  }, [])
+
   return (
     <ErrorBoundary>
       <ThemeProvider>
@@ -23,7 +29,7 @@ function App() {
             className="page-root relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.65, ease: CINEMATIC_EASE }}
+            transition={{ duration: 0.55, ease: CINEMATIC_EASE }}
           >
             <Navbar />
             <main>

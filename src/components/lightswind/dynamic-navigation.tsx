@@ -54,8 +54,11 @@ export const DynamicNavigation = ({
     border: "border",
     text: textColor || "text-foreground", // Use provided or default white
     highlight: highlightColor || "bg-foreground/10", // Use provided or default white/10
-    glow: `shadow-[0_0_${glowIntensity}px_rgba(255,255,255,0.3)]`,
   };
+
+  // Avoid dynamic Tailwind arbitrary values (they can leak literal `${}` into CSS at build time).
+  // Keep the same look via inline box-shadow for the glow intensity.
+  const glowPx = Math.max(0, Math.min(10, glowIntensity)) * 4;
 
   // Update highlight position based on active link
   const updateHighlightPosition = (id?: string) => {
@@ -157,12 +160,12 @@ export const DynamicNavigation = ({
         shadow-lg transition-all duration-300`,
         defaultThemeStyles.bg,
         defaultThemeStyles.border,
-        defaultThemeStyles.glow,
         className
       )}
       style={{
         backgroundColor: backgroundColor,
         color: textColor,
+        boxShadow: `0 10px 15px -3px rgba(0,0,0,0.18), 0 4px 6px -4px rgba(0,0,0,0.14), 0 0 ${glowPx}px rgba(255,255,255,0.22)`,
       }}
     >
       {/* Background highlight */}

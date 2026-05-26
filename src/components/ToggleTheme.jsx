@@ -59,7 +59,7 @@ export default function ToggleTheme({ className = '', duration = 400, ...props }
         ref={buttonRef}
         type="button"
         onClick={handleToggle}
-        className={`flex h-9 w-9 items-center justify-center rounded-full border border-[var(--glass-border)] text-[var(--text-primary)] transition-colors hover:border-[var(--text-accent)] hover:text-[var(--text-accent)] ${className}`}
+        className={`interactive-tap flex h-9 w-9 items-center justify-center rounded-full border border-[var(--glass-border)] text-[var(--text-primary)] transition-[color,border-color,transform] duration-200 hover:border-[var(--text-accent)] hover:text-[var(--text-accent)] active:scale-95 ${className}`}
         aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
         {...props}
       >

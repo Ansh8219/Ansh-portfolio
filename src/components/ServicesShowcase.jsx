@@ -1,5 +1,6 @@
 import { memo } from 'react'
 import { motion } from 'framer-motion'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import { WordReveal } from './TextReveal'
 import ServicesBento from './ServicesBento'
 import {
@@ -9,6 +10,8 @@ import {
 } from './ScrollReveal'
 
 function ServicesShowcase({ services, onExploreClick }) {
+  const isMobile = useMediaQuery('(max-width: 767px)')
+
   return (
     <section id="services" className="w-full bg-[var(--bg-primary)] py-12 sm:py-16 md:py-20">
       <motion.div
@@ -31,7 +34,7 @@ function ServicesShowcase({ services, onExploreClick }) {
 
         <motion.div className="w-full max-w-none" variants={revealUp}>
           <p className="mb-4 text-center text-[10px] font-medium uppercase tracking-[0.35em] text-secondary">
-            Hover a tile to explore
+            {isMobile ? 'Tap a tile to explore' : 'Hover a tile to explore'}
           </p>
           <ServicesBento services={services} className="w-full md:min-h-[520px]" />
         </motion.div>

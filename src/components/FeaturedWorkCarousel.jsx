@@ -1,4 +1,5 @@
-import { useMemo, memo } from 'react'
+import { useMemo, memo, useEffect } from 'react'
+import { preloadImages } from '../utils/preloadImages'
 import { useReducedMotion } from 'framer-motion'
 import ThreeDCarousel from './lightswind/3d-carousel'
 import { useMediaQuery } from '../hooks/useMediaQuery'
@@ -20,6 +21,10 @@ function FeaturedWorkCarousel({ projects }) {
   const isMobile = useMediaQuery('(max-width: 767px)')
   const isTablet = useMediaQuery('(max-width: 1023px)')
   const items = useMemo(() => mapProjectsToCarouselItems(projects), [projects])
+
+  useEffect(() => {
+    preloadImages(projects.map((p) => p.image), { priority: 'low' })
+  }, [projects])
 
   const cardHeight = isMobile ? 360 : isTablet ? 440 : 520
 

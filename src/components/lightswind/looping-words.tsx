@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import { cn } from "../lib/utils";
+import { CINEMATIC_EASE, MOTION_DURATION } from "../../motion/cinematic";
 
 const SLOT_HEIGHT = "2.75em";
 
@@ -99,7 +100,7 @@ export function LoopingWords({
 
       await controls.start({
         y: `-${(index * 100) / duplicatedWords.length}%`,
-        transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] },
+        transition: { duration: 1, ease: CINEMATIC_EASE },
       });
 
       if (index === totalOriginal) {
@@ -115,16 +116,17 @@ export function LoopingWords({
   if (totalOriginal === 0) return null;
 
   return (
-    <div className={cn("mx-auto flex w-full justify-center", className)}>
+    <div className={cn("mx-auto flex w-full max-w-full min-w-0 justify-center", className)}>
       <div
         className={cn(
-          "relative overflow-hidden text-center font-bold uppercase leading-[0.88]",
+          "relative max-w-full overflow-hidden text-center font-bold uppercase leading-[0.88]",
           textClassName,
         )}
         style={{
           height: SLOT_HEIGHT,
-          width: slotWidth != null ? slotWidth : "max-content",
-          minWidth: slotWidth != null ? slotWidth : "12ch",
+          width: slotWidth != null ? `min(${slotWidth}px, 100%)` : "max-content",
+          minWidth: slotWidth != null ? `min(${slotWidth}px, 12ch)` : "12ch",
+          maxWidth: "100%",
         }}
       >
         <motion.ul
@@ -169,12 +171,12 @@ export function LoopingWords({
         <motion.div
           className="pointer-events-none absolute left-1/2 top-1/2 z-20 h-[0.92em] -translate-x-1/2 -translate-y-1/2"
           animate={{ width: selectorWidth || "auto" }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: MOTION_DURATION, ease: CINEMATIC_EASE }}
         >
           <div
             className="absolute inset-0 rounded-sm"
             style={{
-              boxShadow: "0 0 32px rgba(255, 107, 0, 0.22), inset 0 0 20px rgba(255, 107, 0, 0.04)",
+              boxShadow: "0 0 24px rgba(255, 107, 0, 0.18), inset 0 0 16px rgba(255, 107, 0, 0.03)",
             }}
           />
           <div className="absolute top-0 left-0 h-[0.14em] w-[0.14em] border-l-[0.04em] border-t-[0.04em] border-[var(--text-accent)]" />
