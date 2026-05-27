@@ -5,6 +5,7 @@ import LenisProvider from './components/LenisProvider.jsx'
 import 'lenis/dist/lenis.css'
 import './index.css'
 
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <LenisProvider>
