@@ -1,4 +1,4 @@
-# NorthVaultStudios Website
+# NorthVaultStudios Website core
 🚀 NorthVaultStudios — Building the future
 
 A futuristic, glassmorphism-themed website for NorthVaultStudios digital agency.
