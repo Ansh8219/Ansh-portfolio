@@ -383,10 +383,12 @@
   }
 
   .hero-display-accent {
+    color: var(--text-accent);
     background: linear-gradient(135deg, #ff6b00 0%, #ff8533 55%, #ffb347 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: none;
   }
 
   .hero-lead {
@@ -554,12 +556,12 @@
   }
 
   .hero-display,
-  .hero-display--row span {
+  .hero-display--row span:not(.hero-display-accent) {
     text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45);
   }
 
   .light .hero-display,
-  .light .hero-display--row span {
+  .light .hero-display--row span:not(.hero-display-accent) {
     text-shadow: 0 1px 16px rgba(245, 240, 235, 0.65);
   }
 

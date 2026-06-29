@@ -29,7 +29,7 @@ export const TrustedUsers: React.FC<TrustedUsersProps> = ({
   return (
     <div
       className={cn(
-        'flex items-center justify-start gap-4 bg-transparent py-2 text-foreground sm:justify-center sm:gap-6 sm:py-4',
+        'flex items-center justify-start gap-4 bg-transparent py-2 text-foreground sm:gap-6 sm:py-4',
         className,
       )}
     >

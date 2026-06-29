@@ -7,14 +7,14 @@ import { CINEMATIC_EASE, createStaggerContainer } from '../motion/cinematic'
  */
 export const SCROLL_VIEWPORT = {
   once: true,
-  amount: 0.12,
-  margin: '0px 0px -72px 0px',
+  amount: 0.1,
+  margin: '0px 0px 48px 0px',
 }
 
 export const SCROLL_VIEWPORT_LOOSE = {
   once: true,
   amount: 0.08,
-  margin: '0px 0px -64px 0px',
+  margin: '0px 0px 64px 0px',
 }
 
 /** @deprecated Use SCROLL_VIEWPORT — kept for imports that still reference it. */
@@ -22,11 +22,12 @@ export const SCROLL_VIEWPORT_ONCE = SCROLL_VIEWPORT
 
 export { CINEMATIC_EASE, TEXT_REVEAL_VIEWPORT } from '../motion/cinematic'
 
-/** Opacity-only for section blocks — stable with Lenis. */
+/** Fade + rise — content feels like it loads upward as you scroll (Lenis-safe with once viewport). */
 export const revealUp = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
+    y: 0,
     transition: { duration: 0.55, ease: CINEMATIC_EASE },
   },
 }
@@ -42,9 +43,10 @@ export const revealFade = {
 export const staggerContainer = createStaggerContainer(0.03, 0.07)
 
 export const staggerItem = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
+    y: 0,
     transition: { duration: 0.5, ease: CINEMATIC_EASE },
   },
 }

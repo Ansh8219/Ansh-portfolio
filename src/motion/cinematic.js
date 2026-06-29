@@ -13,8 +13,8 @@ export const UI_HOVER_TRANSITION = { duration: MOTION_HOVER, ease: CINEMATIC_EAS
 /** One-shot — avoids re-triggering animations while Lenis scrolls through a section. */
 export const TEXT_REVEAL_VIEWPORT = {
   once: true,
-  amount: 0.15,
-  margin: '0px 0px -72px 0px',
+  amount: 0.12,
+  margin: '0px 0px 48px 0px',
 }
 
 export function getMotionOffset(prefersReducedMotion, isMobile) {
