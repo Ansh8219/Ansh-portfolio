@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin, HiOutlineMap } from 'react-icons/hi2'
 import BrandedEmail, { MAILTO } from '../components/BrandedEmail'
 import { SCROLL_VIEWPORT } from '../components/ScrollReveal'
+import HandwriteAccent from '../components/HandwriteAccent'
 
 const Contact = memo(() => {
   const [formData, setFormData] = useState({
@@ -57,9 +58,12 @@ const Contact = memo(() => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="section-heading mb-6 gradient-text neon-glow">
+            <HandwriteAccent as="h1" size="title" className="mb-2">
               Get In Touch
-            </h1>
+            </HandwriteAccent>
+            <HandwriteAccent tone="soft" className="mb-6">
+              Say Hello → Start Building
+            </HandwriteAccent>
             <p className="editorial-body mx-auto max-w-3xl text-base sm:text-xl">
               Let's discuss how we can bring your digital vision to life
             </p>
@@ -79,7 +83,12 @@ const Contact = memo(() => {
               transition={{ duration: 0.8 }}
               className="glass-strong rounded-2xl p-5 sm:p-8 md:p-12"
             >
-              <h2 className="mb-6 text-2xl font-bold gradient-text sm:text-3xl">Send Us a Message</h2>
+              <HandwriteAccent as="h2" size="title" align="left" className="mb-2">
+                Send Us a Message
+              </HandwriteAccent>
+              <HandwriteAccent align="left" tone="soft" className="mb-6">
+                We're Listening
+              </HandwriteAccent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-semibold mb-2 text-primary">
@@ -153,7 +162,12 @@ const Contact = memo(() => {
               className="space-y-6"
             >
               <div className="glass-strong rounded-2xl p-5 sm:p-8 md:p-12">
-                <h2 className="mb-6 text-2xl font-bold gradient-text sm:mb-8 sm:text-3xl">Contact Information</h2>
+                <HandwriteAccent as="h2" size="title" align="left" className="mb-2">
+                  Contact Information
+                </HandwriteAccent>
+                <HandwriteAccent align="left" tone="soft" className="mb-6 sm:mb-8">
+                  Find Us Here
+                </HandwriteAccent>
                 <div className="space-y-6">
                   {contactInfo.map((info, index) => {
                     if (!info.link) {
@@ -230,9 +244,12 @@ const Contact = memo(() => {
             transition={{ duration: 0.8 }}
             className="glass-strong rounded-2xl p-6 text-center sm:p-10 md:p-12"
           >
-            <h2 className="mb-6 text-2xl font-bold gradient-text sm:text-4xl md:text-5xl">
+            <HandwriteAccent as="h2" size="title" className="mb-2">
               Ready to Start Your Project?
-            </h2>
+            </HandwriteAccent>
+            <HandwriteAccent tone="soft" className="mb-6">
+              One Email Away
+            </HandwriteAccent>
             <p className="mb-8 text-base text-secondary sm:text-xl">
               Let's collaborate and create something extraordinary together
             </p>

@@ -10,8 +10,10 @@ function ResponsivePicture({
   loading = 'lazy',
   fetchPriority,
   sizes,
+  style,
+  preferWebp = true,
 }) {
-  const webp = /\.jpe?g$/i.test(src) ? webpFromJpeg(src) : null
+  const webp = preferWebp && /\.jpe?g$/i.test(src) ? webpFromJpeg(src) : null
 
   return (
     <picture>
@@ -26,6 +28,7 @@ function ResponsivePicture({
         fetchPriority={fetchPriority}
         sizes={sizes}
         className={className}
+        style={style}
       />
     </picture>
   )

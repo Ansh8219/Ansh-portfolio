@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
-import { motion, useAnimationControls } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "../lib/utils";
 import { CINEMATIC_EASE, MOTION_DURATION } from "../../motion/cinematic";
 
-const SLOT_HEIGHT = "2.75em";
+const SLOT_HEIGHT_EM = 2.75;
 
 export interface LoopingWordsProps {
   words: string[];
@@ -28,14 +28,17 @@ export function LoopingWords({
   slotPaddingX = 0,
   selectorPaddingX = 16,
 }: LoopingWordsProps) {
-  const controls = useAnimationControls();
   const wordsRef = useRef<(HTMLLIElement | null)[]>([]);
   const [selectorWidth, setSelectorWidth] = useState(0);
   const [slotWidth, setSlotWidth] = useState<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [offsetIndex, setOffsetIndex] = useState(0);
+  const [isJumping, setIsJumping] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
-  const duplicatedWords = [...words, ...words];
   const totalOriginal = words.length;
+  // Duplicate once so the last → first transition can scroll seamlessly, then snap.
+  const duplicatedWords = totalOriginal > 0 ? [...words, words[0]] : [];
 
   const measureSlots = useCallback(() => {
     let max = 0;
@@ -51,67 +54,76 @@ export function LoopingWords({
     }
   }, [totalOriginal, slotPaddingX]);
 
-  const updateWidth = useCallback(
-    (slotIndex: number) => {
-      const el = wordsRef.current[slotIndex];
+  const updateSelector = useCallback(
+    (wordIndex: number) => {
+      const el = wordsRef.current[wordIndex];
       const textEl = el?.querySelector("p");
       if (textEl) {
         setSelectorWidth(Math.ceil(textEl.getBoundingClientRect().width) + selectorPaddingX * 2);
       }
-      setActiveIndex(slotIndex % totalOriginal);
     },
-    [totalOriginal, selectorPaddingX],
+    [selectorPaddingX],
   );
 
   useLayoutEffect(() => {
     const run = () => {
       measureSlots();
-      updateWidth(0);
+      updateSelector(0);
     };
     if (document.fonts?.ready) {
       document.fonts.ready.then(run).catch(run);
     } else {
       run();
     }
-  }, [measureSlots, updateWidth, words, textClassName]);
+  }, [measureSlots, updateSelector, words, textClassName]);
 
   useEffect(() => {
     const onResize = () => {
       measureSlots();
-      updateWidth(activeIndex);
+      updateSelector(activeIndex);
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [measureSlots, updateWidth, activeIndex]);
+  }, [measureSlots, updateSelector, activeIndex]);
 
   useEffect(() => {
-    if (totalOriginal === 0) return;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
-      updateWidth(0);
+    if (totalOriginal === 0 || prefersReducedMotion) {
+      setOffsetIndex(0);
+      setActiveIndex(0);
+      updateSelector(0);
       return;
     }
 
-    let index = 0;
-    const interval = setInterval(async () => {
-      index++;
-      updateWidth(index % totalOriginal);
-
-      await controls.start({
-        y: `-${(index * 100) / duplicatedWords.length}%`,
-        transition: { duration: 1, ease: CINEMATIC_EASE },
+    const id = window.setInterval(() => {
+      setOffsetIndex((prev) => {
+        const next = prev + 1;
+        const wordIndex = next % totalOriginal;
+        setActiveIndex(wordIndex);
+        updateSelector(wordIndex);
+        return next;
       });
-
-      if (index === totalOriginal) {
-        index = 0;
-        controls.set({ y: "0%" });
-        updateWidth(0);
-      }
     }, intervalMs);
 
-    return () => clearInterval(interval);
-  }, [controls, totalOriginal, duplicatedWords.length, intervalMs, updateWidth]);
+    return () => window.clearInterval(id);
+  }, [totalOriginal, prefersReducedMotion, intervalMs, updateSelector]);
+
+  // After scrolling onto the duplicated first word, snap back to the real first item.
+  useEffect(() => {
+    if (offsetIndex < totalOriginal || totalOriginal === 0) return;
+
+    const timeout = window.setTimeout(() => {
+      setIsJumping(true);
+      setOffsetIndex(0);
+      setActiveIndex(0);
+      updateSelector(0);
+      // Allow the next paint with transition disabled, then re-enable.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setIsJumping(false));
+      });
+    }, MOTION_DURATION * 1000 + 40);
+
+    return () => window.clearTimeout(timeout);
+  }, [offsetIndex, totalOriginal, updateSelector]);
 
   if (totalOriginal === 0) return null;
 
@@ -123,7 +135,7 @@ export function LoopingWords({
           textClassName,
         )}
         style={{
-          height: SLOT_HEIGHT,
+          height: `${SLOT_HEIGHT_EM}em`,
           width: slotWidth != null ? `min(${slotWidth}px, 100%)` : "max-content",
           minWidth: slotWidth != null ? `min(${slotWidth}px, 12ch)` : "12ch",
           maxWidth: "100%",
@@ -131,21 +143,25 @@ export function LoopingWords({
       >
         <motion.ul
           className="m-0 flex w-full list-none flex-col p-0"
-          animate={controls}
-          initial={{ y: "0%" }}
+          animate={{ y: `${-offsetIndex * SLOT_HEIGHT_EM}em` }}
+          transition={
+            isJumping || prefersReducedMotion
+              ? { duration: 0 }
+              : { duration: MOTION_DURATION, ease: CINEMATIC_EASE }
+          }
         >
           {duplicatedWords.map((word, i) => {
             const wordIndex = i % totalOriginal;
-            const isActive = accentActive && wordIndex === activeIndex;
+            const isActive = accentActive && wordIndex === activeIndex && i === offsetIndex;
 
             return (
               <li
-                key={i}
+                key={`${word}-${i}`}
                 ref={(el) => {
                   wordsRef.current[i] = el;
                 }}
                 className="flex w-full shrink-0 items-center justify-center"
-                style={{ height: SLOT_HEIGHT }}
+                style={{ height: `${SLOT_HEIGHT_EM}em` }}
               >
                 <p
                   className={cn(

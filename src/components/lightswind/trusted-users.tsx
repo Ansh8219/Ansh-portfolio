@@ -1,52 +1,42 @@
 import React from "react";
-import { Star } from "lucide-react";
 import { cn } from "../lib/utils";
 import { CountUp } from "./count-up";
 
 interface TrustedUsersProps {
   avatars: string[];
-  rating?: number;
   totalUsersText?: number;
   caption?: string;
+  label?: string;
   className?: string;
-  starColorClass?: string;
-  ringColors?: string[];
-  linkHref?: string;
-  linkLabel?: string;
 }
 
 export const TrustedUsers: React.FC<TrustedUsersProps> = ({
   avatars,
-  rating = 5,
-  totalUsersText = 1000, // ✅ default as number
+  totalUsersText = 250,
   caption = "Trusted by",
+  label = "clients",
   className = "",
-  starColorClass = "text-yellow-400",
-  ringColors = [],
-  linkHref = "/pricing",
-  linkLabel = "Pro users",
 }) => {
   return (
     <div
       className={cn(
-        'flex items-center justify-start gap-4 bg-transparent py-2 text-foreground sm:gap-6 sm:py-4',
+        "hero-trust flex items-center gap-3.5 sm:gap-4",
         className,
       )}
     >
-      <div className="flex -space-x-4">
+      <div className="flex shrink-0 -space-x-2.5" aria-hidden="true">
         {avatars.map((src, i) => (
           <div
             key={i}
-            className={`w-10 h-10 rounded-full overflow-hidden ring-1 ring-offset-2 ring-offset-[var(--bg-primary)] ${
-              ringColors[i] || "ring-blue-900"
-            }`}
+            className="relative h-9 w-9 overflow-hidden rounded-full border border-[#ff6b00]/45 shadow-[0_0_0_2px_var(--bg-primary)] sm:h-10 sm:w-10"
+            style={{ zIndex: avatars.length - i }}
           >
             <img
               src={src}
-              alt={`Avatar ${i + 1}`}
+              alt=""
               width={80}
               height={80}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
               loading="eager"
               decoding="async"
               fetchPriority="low"
@@ -55,29 +45,22 @@ export const TrustedUsers: React.FC<TrustedUsersProps> = ({
         ))}
       </div>
 
-      <div className="flex flex-col items-start gap-1">
-        <div className={`flex gap-1 ${starColorClass}`}>
-          {Array.from({ length: rating }).map((_, i) => (
-            <Star key={i} fill="currentColor" className="w-4 h-4" aria-hidden="true" />
-          ))}
-        </div>
-        <div className="text-foreground text-xs md:text-sm font-medium flex items-center flex-wrap">
-          {caption}
-          <CountUp
-            value={totalUsersText}
-            duration={2}
-            separator=","
-            className="ml-1 text-lg"
-            suffix="+"
-            colorScheme="gradient"
-          />
-          {linkHref && linkLabel ? (
-            <a className="underline text-[var(--text-accent)] ml-1" href={linkHref}>
-              {linkLabel}
-            </a>
-          ) : null}
-        </div>
-      </div>
+      <p className="m-0 text-[0.9375rem] font-medium leading-snug text-[var(--text-secondary)]">
+        <span>{caption} </span>
+        <CountUp
+          value={totalUsersText}
+          duration={2}
+          separator=","
+          triggerOnView={false}
+          className="hero-trust-count inline-flex !text-[1.05em] !font-semibold leading-none"
+          numberClassName="hero-trust-count"
+          suffix=""
+          colorScheme="custom"
+          customColor="#ff6b00"
+        />
+        <span className="hero-trust-count">+</span>
+        <span> {label}</span>
+      </p>
     </div>
   );
 };

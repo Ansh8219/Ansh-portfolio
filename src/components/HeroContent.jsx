@@ -10,34 +10,34 @@ const trustedAvatars = [
 
 function HeroContent() {
   return (
-    <div className="w-full max-w-none">
+    <div className="hero-copy-inner w-full max-w-none">
+      <p className="hero-handwrite hero-handwrite--top" aria-hidden="true">
+        More Than a Development Agency
+      </p>
+
       <p className="hero-eyebrow">NorthVaultStudios · AI-Driven Digital Studio</p>
 
-      <h1 className="hero-display hero-display--row mb-5 sm:mb-7">
-        <span>Digital growth,&nbsp;</span>
-        <span className="hero-display-accent">built to scale.</span>
+      <h1 className="hero-display hero-display--stack mb-5 sm:mb-7">
+        <span className="hero-display-line">Your Vision,</span>
+        <span className="hero-display-accent">Our Expertise.</span>
       </h1>
 
-      <p className="hero-lead mb-5 w-full max-w-2xl sm:mb-7">
-        Marketing, web, apps, and custom software—one team, one roof, built for brands that want to
-        move fast without sacrificing quality.
+      <p className="hero-handwrite hero-handwrite--mid" aria-hidden="true">
+        Ideas → Impact
+      </p>
+
+      <p className="hero-lead mb-5 w-full max-w-xl sm:mb-7">
+        We design, develop and grow digital products
+        <br className="hidden sm:block" />
+        that make businesses stronger, faster and future-ready.
       </p>
 
       <TrustedUsers
         avatars={trustedAvatars}
-        rating={5}
         totalUsersText={250}
-        caption="Trusted by "
-        starColorClass="text-[#ff6b00]"
-        ringColors={[
-          'ring-[#ff6b00]/55',
-          'ring-[#ff8533]/55',
-          'ring-[#ff6b00]/45',
-          'ring-[#ff8533]/45',
-        ]}
-        linkHref="#contact"
-        linkLabel="clients"
-        className="mb-0 w-full flex-col items-start gap-4 px-0 py-0 text-[var(--text-primary)] sm:flex-row sm:items-center sm:gap-6"
+        caption="Trusted by"
+        label="clients"
+        className="mb-0"
       />
     </div>
   )

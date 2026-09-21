@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { HiOutlineGlobeAlt, HiOutlineComputerDesktop } from 'react-icons/hi2'
 import { FaCode, FaMobileAlt, FaBullhorn, FaPaintBrush, FaCloud } from 'react-icons/fa'
 import { SCROLL_VIEWPORT } from '../components/ScrollReveal'
+import HandwriteAccent from '../components/HandwriteAccent'
 
 const Services = () => {
   const services = [
@@ -60,9 +61,12 @@ const Services = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="section-heading mb-6 gradient-text neon-glow">
+            <HandwriteAccent as="h1" size="title" className="mb-2">
               Our Services
-            </h1>
+            </HandwriteAccent>
+            <HandwriteAccent tone="soft" className="mb-6">
+              Everything Under One Roof
+            </HandwriteAccent>
             <p className="editorial-body mx-auto max-w-3xl text-base sm:text-xl">
               Comprehensive digital solutions tailored to your business needs
             </p>
@@ -118,9 +122,12 @@ const Services = () => {
             transition={{ duration: 0.8 }}
             className="glass-strong rounded-2xl p-6 text-center sm:p-10 md:p-12"
           >
-            <h2 className="mb-6 text-2xl font-bold gradient-text sm:text-4xl md:text-5xl">
+            <HandwriteAccent as="h2" size="title" className="mb-2">
               Ready to Get Started?
-            </h2>
+            </HandwriteAccent>
+            <HandwriteAccent tone="soft" className="mb-6">
+              Your Next Build Starts Here
+            </HandwriteAccent>
             <p className="mb-8 text-base text-secondary sm:text-xl">
               Let's discuss how we can transform your digital presence
             </p>

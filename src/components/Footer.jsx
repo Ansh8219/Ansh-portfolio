@@ -61,23 +61,11 @@ const Footer = () => (
           variants={brandVariants}
         >
           <span
-            className="footer-brand-mark pointer-events-none select-none font-black"
+            className="footer-brand-mark pointer-events-none select-none"
             aria-hidden
           >
-            <span
-              style={{
-                fontWeight: 900,
-                background: 'linear-gradient(135deg, #ff6b00, #ff8533)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              NV
-            </span>
-            <span className="text-[var(--text-primary)]" style={{ fontWeight: 900 }}>
-              Studios..
-            </span>
+            <span className="footer-brand-mark__nv">NV</span>
+            <span className="footer-brand-mark__studios">Studios..</span>
           </span>
         </motion.div>
 
@@ -88,6 +76,11 @@ const Footer = () => (
           <p className="mt-3 text-sm leading-relaxed text-secondary">
             AI-driven digital growth — marketing, web, apps, and custom software under one roof.
           </p>
+          <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] uppercase tracking-[0.28em] text-secondary">
+            <li>Reply within 24h</li>
+            <li>Chandigarh, India</li>
+            <li>NDA on request</li>
+          </ul>
         </motion.div>
 
         <motion.div variants={childVariants} className="mt-8 md:mt-10">

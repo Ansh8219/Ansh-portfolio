@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { FaBrain, FaRocket, FaCode, FaChartLine, FaBullseye } from "react-icons/fa"
 import { SCROLL_VIEWPORT } from '../components/ScrollReveal'
+import HandwriteAccent from '../components/HandwriteAccent'
 
 const About = () => {
   const services = [
@@ -39,15 +40,19 @@ const About = () => {
 
       {/* HERO */}
       <section className="section-pad mb-16 text-center sm:mb-24 md:mb-32">
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-6 text-[clamp(2rem,7vw,4.5rem)] font-bold leading-tight"
+          className="mb-6"
         >
-          Building Digital Systems<br />
-          <span className="gradient-text">That Grow Brands</span>
-        </motion.h1>
+          <HandwriteAccent as="h1" size="title" className="mb-2">
+            About the Studio
+          </HandwriteAccent>
+          <HandwriteAccent tone="soft">
+            Digital Systems That Grow Brands
+          </HandwriteAccent>
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -69,7 +74,12 @@ const About = () => {
             viewport={SCROLL_VIEWPORT}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="section-heading mb-6">Who We Are</h2>
+            <HandwriteAccent as="h2" size="title" align="left" className="mb-2">
+              Who We Are
+            </HandwriteAccent>
+            <HandwriteAccent align="left" tone="soft" className="mb-6">
+              Built to Grow Brands
+            </HandwriteAccent>
             <p className="editorial-body text-base leading-relaxed sm:text-lg">
               NorthVaultStudios was built on a simple belief — technology should
               feel intelligent, intuitive, and purposeful.
@@ -91,7 +101,14 @@ const About = () => {
 
       {/* WHAT WE DO */}
       <section className="section-pad mb-16 sm:mb-24 md:mb-32">
-        <h2 className="section-heading mb-10 text-center sm:mb-16">What We Do</h2>
+        <div className="mb-10 text-center sm:mb-16">
+          <HandwriteAccent as="h2" size="title">
+            What We Do
+          </HandwriteAccent>
+          <HandwriteAccent tone="soft" className="mt-2">
+            Ideas → Systems → Scale
+          </HandwriteAccent>
+        </div>
 
         <div className="site-shell grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
           {services.map((item, index) => (
@@ -115,7 +132,14 @@ const About = () => {
 
       {/* HOW WE WORK */}
       <section className="section-pad mb-16 sm:mb-24 md:mb-32">
-        <h2 className="section-heading mb-10 text-center sm:mb-16">How We Work</h2>
+        <div className="mb-10 text-center sm:mb-16">
+          <HandwriteAccent as="h2" size="title">
+            How We Work
+          </HandwriteAccent>
+          <HandwriteAccent tone="soft" className="mt-2">
+            Clear Steps → Sharp Delivery
+          </HandwriteAccent>
+        </div>
 
         <div className="site-shell space-y-6">
           {process.map((step, index) => (
@@ -146,9 +170,12 @@ const About = () => {
           className="site-shell rounded-3xl bg-black p-8 text-center text-white sm:p-12 md:p-16"
         >
           <FaBullseye className="mx-auto mb-6 text-4xl text-orange-500" />
-          <h2 className="section-heading mb-6">
+          <HandwriteAccent as="h2" size="title" className="mb-2">
             Our Promise
-          </h2>
+          </HandwriteAccent>
+          <HandwriteAccent tone="soft" className="mb-6">
+            Systems That Last
+          </HandwriteAccent>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
             We don’t chase trends. We build systems that last.
             <br />

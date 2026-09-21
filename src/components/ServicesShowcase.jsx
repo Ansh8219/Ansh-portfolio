@@ -1,15 +1,15 @@
 import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { useMediaQuery } from '../hooks/useMediaQuery'
-import { WordReveal } from './TextReveal'
 import ServicesBento from './ServicesBento'
+import HandwriteAccent from './HandwriteAccent'
 import {
   SCROLL_VIEWPORT,
   revealUp,
   staggerContainer as scrollStaggerContainer,
 } from './ScrollReveal'
 
-function ServicesShowcase({ services, onExploreClick }) {
+function ServicesShowcase({ services }) {
   const isMobile = useMediaQuery('(max-width: 767px)')
 
   return (
@@ -26,10 +26,12 @@ function ServicesShowcase({ services, onExploreClick }) {
           variants={revealUp}
         >
           <p className="mb-2 text-[10px] uppercase tracking-[0.35em] text-secondary md:text-xs">What we do</p>
-          <WordReveal as="h2" className="section-heading" text="Our Services" />
-          <button type="button" onClick={onExploreClick} className="btn-primary mt-8 md:mt-10">
-            Start a Project
-          </button>
+          <HandwriteAccent as="h2" size="title">
+            Our Services
+          </HandwriteAccent>
+          <HandwriteAccent tone="soft" className="mt-2 md:mt-3">
+            Strategy → Build → Scale
+          </HandwriteAccent>
         </motion.div>
 
         <motion.div className="w-full max-w-none" variants={revealUp}>

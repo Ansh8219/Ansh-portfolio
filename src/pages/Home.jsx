@@ -1,5 +1,6 @@
 import { useRef, useState, useCallback, memo } from 'react'
 import { motion, useSpring, useMotionValue } from 'framer-motion'
+import { ArrowRight, Play } from 'lucide-react'
 import { HiOutlineGlobeAlt, HiOutlinePhone, HiOutlineMapPin } from 'react-icons/hi2'
 import {
   FaMobileAlt,
@@ -17,8 +18,8 @@ import BrandedEmail, { MAILTO } from '../components/BrandedEmail'
 import HeroContent from '../components/HeroContent'
 import HeroTicker from '../components/HeroTicker'
 import ServicesShowcase from '../components/ServicesShowcase'
+import HandwriteAccent from '../components/HandwriteAccent'
 import { LoopingWords } from '../components/lightswind/looping-words'
-import { WordReveal, LineReveal } from '../components/TextReveal'
 import {
   SCROLL_VIEWPORT,
   SCROLL_VIEWPORT_LOOSE,
@@ -34,7 +35,6 @@ import {
   MOTION_DURATION,
 } from '../motion/cinematic'
 import { usePrefersFinePointer } from '../hooks/usePrefersFinePointer'
-import ResponsivePicture from '../components/ResponsivePicture'
 const SPRING_CONFIG = { stiffness: 75, damping: 18 }
 const SPRING_TRANSITION = { type: 'spring', stiffness: 75, damping: 18 }
 
@@ -45,7 +45,7 @@ const SERVICES = [
     title: 'Website Development',
     description:
       'Custom, responsive websites built with modern technologies. From simple landing pages to complex web applications, we create digital experiences that engage and convert.',
-    image: '/ourServices/websitedev_icon.jpg',
+    image: '/ourServices/service-website.jpg',
     features: ['Responsive Design', 'SEO Optimized', 'Fast Performance', 'Modern Stack'],
   },
   {
@@ -54,7 +54,7 @@ const SERVICES = [
     title: 'Mobile Apps',
     description:
       'Native and cross-platform mobile applications for iOS and Android. We build apps that are intuitive, performant, and deliver exceptional user experiences.',
-    image: '/ourServices/mobileAppDev_image.jpg',
+    image: '/ourServices/service-mobile.jpg',
     features: ['iOS & Android', 'Cross-Platform', 'UI/UX Design', 'App Store Optimization'],
   },
   {
@@ -63,7 +63,7 @@ const SERVICES = [
     title: 'Marketing & Branding',
     description:
       'Complete branding solutions that tell your story. From logo design to comprehensive brand guidelines, we help you stand out in the digital landscape.',
-    image: '/ourServices/marketingAndBranding_icon.jpg',
+    image: '/ourServices/service-branding.jpg',
     features: ['Brand Identity', 'Logo Design', 'Marketing Strategy', 'Content Creation'],
   },
   {
@@ -72,7 +72,7 @@ const SERVICES = [
     title: 'Social Media Management',
     description:
       'Strategic social media management that grows your audience and engagement. We create compelling content and manage your presence across all platforms.',
-    image: '/ourServices/marketingAndBranding_icon.jpg',
+    image: '/ourServices/service-social.jpg',
     features: ['Content Strategy', 'Community Management', 'Analytics & Reporting', 'Campaign Management'],
   },
   {
@@ -81,7 +81,7 @@ const SERVICES = [
     title: 'UI/UX Design',
     description:
       'User-centered design that combines aesthetics with functionality. We create interfaces that are beautiful, intuitive, and drive user engagement.',
-    image: '/ourServices/websitedev_icon.jpg',
+    image: '/ourServices/service-uiux.jpg',
     features: ['User Research', 'Wireframing', 'Prototyping', 'Design Systems'],
   },
   {
@@ -90,7 +90,7 @@ const SERVICES = [
     title: 'IT & Cloud Solutions',
     description:
       'Scalable IT infrastructure and cloud solutions for businesses of all sizes. From cloud migration to DevOps, we ensure your technology scales with you.',
-    image: '/ourServices/itSolutions_icon.jpg',
+    image: '/ourServices/service-cloud.jpg',
     features: ['Cloud Migration', 'DevOps', 'Infrastructure Setup', 'Security & Compliance'],
   },
 ]
@@ -101,8 +101,9 @@ const FEATURED_PROJECTS = [
     category: 'Web Development',
     description:
       'A high-converting storefront with real-time inventory, streamlined checkout, and performance tuned for global traffic.',
+    outcome: 'Checkout conversion +38% · 2.1s LCP',
     tech: 'React, Node.js, MongoDB',
-    image: '/ourServices/websitedev_icon.jpg',
+    image: '/ourServices/service-website.jpg',
     year: '2024',
   },
   {
@@ -110,8 +111,9 @@ const FEATURED_PROJECTS = [
     category: 'Mobile Apps',
     description:
       'Secure, intuitive banking on iOS and Android—biometric login, instant transfers, and a polished native feel.',
+    outcome: '4.8★ app rating · launch in 10 weeks',
     tech: 'React Native, Firebase',
-    image: '/ourServices/mobileAppDev_image.jpg',
+    image: '/ourServices/service-mobile.jpg',
     year: '2024',
   },
   {
@@ -119,8 +121,9 @@ const FEATURED_PROJECTS = [
     category: 'Branding',
     description:
       'End-to-end rebrand for a tech startup—logo system, typography, and guidelines built for scale across channels.',
+    outcome: 'Unified system across 12 markets',
     tech: 'Figma, Adobe Creative Suite',
-    image: '/ourServices/marketingAndBranding_icon.jpg',
+    image: '/ourServices/service-uiux.jpg',
     year: '2023',
   },
   {
@@ -128,8 +131,9 @@ const FEATURED_PROJECTS = [
     category: 'Cloud & DevOps',
     description:
       'Enterprise-grade cloud architecture with auto-scaling, container orchestration, and 99.9% uptime targets.',
+    outcome: '99.9% uptime · 40% infra cost cut',
     tech: 'AWS, Docker, Kubernetes',
-    image: '/ourServices/itSolutions_icon.jpg',
+    image: '/ourServices/service-cloud.jpg',
     year: '2025',
   },
 ]
@@ -179,12 +183,6 @@ const WHO_WE_ARE_P1 =
 const WHO_WE_ARE_P2 =
   'From web development to mobile apps, marketing to IT solutions, we transform your vision into reality with precision, creativity, and excellence.'
 
-const WHO_WE_ARE_HEADING_WORDS = [
-  { word: 'Who', breakAfter: false },
-  { word: 'We', breakAfter: true },
-  { word: 'Are', breakAfter: false },
-]
-
 const heroStagger = {
   hidden: {},
   visible: {
@@ -215,14 +213,15 @@ function WhoWeAreSection() {
       >
         <motion.div className="flex flex-col" variants={revealUp}>
           <span className="mb-4 inline-block text-xs font-medium uppercase tracking-[0.35em] text-accent">
-            Who We Are
+            About the studio
           </span>
 
-          <WordReveal
-            as="h2"
-            className="section-heading mb-6 md:mb-8"
-            segments={WHO_WE_ARE_HEADING_WORDS}
-          />
+          <HandwriteAccent as="h2" size="title" align="left">
+            Who We Are
+          </HandwriteAccent>
+          <HandwriteAccent align="left" tone="soft" className="mt-2 mb-6 md:mb-8">
+            Purpose → Passion → Product
+          </HandwriteAccent>
 
           <div className="space-y-4 md:space-y-6">
             {bodyLines.map((line, index) => (
@@ -234,18 +233,18 @@ function WhoWeAreSection() {
         </motion.div>
 
         <motion.div
-          className="h-[min(36vh,280px)] w-full overflow-hidden rounded-2xl sm:h-[min(42vh,380px)] lg:h-[min(52vh,460px)]"
+          className="who-we-are__media h-[min(42vh,320px)] w-full overflow-hidden rounded-2xl sm:h-[min(48vh,420px)] lg:h-[min(56vh,520px)]"
           variants={revealUp}
         >
-          <ResponsivePicture
-            src="/homePageImage.jpg"
-            alt="NorthVaultStudios team and work"
-            width={1400}
-            height={933}
-            loading="eager"
-            fetchPriority="high"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="h-full w-full object-cover"
+          <video
+            className="h-full w-full object-cover object-center"
+            src="/updated/who-we-are.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-label="NorthVaultStudios — ideas, design, development, and growth"
           />
         </motion.div>
       </motion.div>
@@ -370,6 +369,7 @@ const Home = () => {
   }, [])
 
   const scrollToContact = () => scrollToSection('contact', 80)
+  const scrollToStory = () => scrollToSection('who-we-are', 80)
 
   return (
     <div className="page-root relative">
@@ -379,6 +379,13 @@ const Home = () => {
         className="hero-section page-hero-pad relative min-h-[100dvh] overflow-hidden bg-[var(--bg-primary)]"
         style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
       >
+        <div className="hero-atmosphere" aria-hidden="true">
+          <div className="hero-atmosphere__wash" />
+          <div className="hero-atmosphere__lamp" />
+          <div className="hero-atmosphere__vignette" />
+          <div className="hero-atmosphere__grain" />
+        </div>
+
         <motion.div
           className="hero-readable hero-pad relative z-10 flex min-h-[calc(100dvh-max(6rem,env(safe-area-inset-top,0px)+5.5rem))] w-full min-w-0 flex-col pb-10 pt-4 sm:pb-14"
           variants={heroStagger}
@@ -386,21 +393,63 @@ const Home = () => {
           animate="visible"
         >
           <div className="hero-stage flex w-full flex-1 flex-col justify-center">
-            <motion.div variants={fadeUp} className="hero-headline">
-              <HeroContent />
-            </motion.div>
+            <div className="hero-layout">
+              <div className="hero-copy">
+                <motion.div variants={fadeUp} className="hero-headline">
+                  <HeroContent />
+                </motion.div>
 
-            <motion.div variants={fadeUp} className="hero-cta-wrap mt-8 sm:mt-10">
-              <motion.button
-                type="button"
-                onClick={scrollToContact}
-                whileHover={{ scale: UI_HOVER_SCALE, transition: UI_HOVER_TRANSITION }}
-                whileTap={{ scale: UI_TAP_SCALE, transition: UI_HOVER_TRANSITION }}
-                className="btn-primary btn-primary--hero w-full max-w-xs sm:w-auto"
-              >
-                Start Now
-              </motion.button>
-            </motion.div>
+                <motion.div variants={fadeUp} className="hero-cta-wrap mt-8 sm:mt-10">
+                  <motion.button
+                    type="button"
+                    onClick={scrollToContact}
+                    whileHover={{ scale: UI_HOVER_SCALE, transition: UI_HOVER_TRANSITION }}
+                    whileTap={{ scale: UI_TAP_SCALE, transition: UI_HOVER_TRANSITION }}
+                    className="btn-primary btn-primary--hero w-full max-w-xs sm:w-auto"
+                  >
+                    Start Now
+                    <ArrowRight className="hero-cta-arrow" strokeWidth={2.4} />
+                  </motion.button>
+                  <motion.button
+                    type="button"
+                    onClick={scrollToStory}
+                    whileHover={{ scale: UI_HOVER_SCALE, transition: UI_HOVER_TRANSITION }}
+                    whileTap={{ scale: UI_TAP_SCALE, transition: UI_HOVER_TRANSITION }}
+                    className="hero-story-btn"
+                  >
+                    <span className="hero-story-play" aria-hidden="true">
+                      <Play className="hero-story-play-icon" fill="currentColor" strokeWidth={0} />
+                    </span>
+                    Watch Our Story
+                  </motion.button>
+                </motion.div>
+              </div>
+
+              <motion.div variants={fadeUp} className="hero-visual" aria-hidden="true">
+                <div className="hero-visual-glow" />
+                <div className="hero-visual-rim" />
+                <div className="hero-visual-frame">
+                  <img
+                    src="/updated/hero-character.png"
+                    alt=""
+                    className="hero-visual-img hero-visual-img--dark"
+                    width={1536}
+                    height={1024}
+                    decoding="async"
+                    fetchPriority="high"
+                  />
+                  <img
+                    src="/updated/hero-character-light.png"
+                    alt=""
+                    className="hero-visual-img hero-visual-img--light"
+                    width={1024}
+                    height={682}
+                    decoding="async"
+                  />
+                </div>
+                <div className="hero-visual-reflect" />
+              </motion.div>
+            </div>
           </div>
 
           <div className="relative mt-auto w-full">
@@ -422,7 +471,7 @@ const Home = () => {
       <WhoWeAreSection />
 
       <ScrollVerticalStack>
-        <ServicesShowcase services={SERVICES} onExploreClick={scrollToContact} />
+        <ServicesShowcase services={SERVICES} />
 
         <section id="work" className="stack-section w-full">
           <motion.div
@@ -432,18 +481,23 @@ const Home = () => {
             whileInView="visible"
             viewport={SCROLL_VIEWPORT}
           >
-            <div className="mb-8 flex flex-col items-center text-center md:mb-10">
+            <div className="mb-6 flex flex-col items-center text-center md:mb-8">
               <p className="mb-2 text-[10px] uppercase tracking-[0.35em] text-secondary md:text-xs">Portfolio</p>
-              <WordReveal as="h2" className="section-heading" text="Featured Work" />
+              <HandwriteAccent as="h2" size="title">
+                Featured Work
+              </HandwriteAccent>
+              <HandwriteAccent tone="soft" className="mt-2 md:mt-3">
+                Proof Over Promises
+              </HandwriteAccent>
               <motion.p
-                className="editorial-body mt-4 max-w-2xl text-sm md:mt-5 md:text-base"
+                className="editorial-body mt-3 max-w-2xl text-sm md:mt-4 md:text-base"
                 variants={revealUp}
               >
                 Selected projects across web, mobile, brand, and cloud—built for growth and long-term scale.
               </motion.p>
             </div>
             <motion.div variants={revealUp}>
-              <FeaturedWorkCarousel projects={FEATURED_PROJECTS} />
+              <FeaturedWorkCarousel projects={FEATURED_PROJECTS} onCtaClick={scrollToContact} />
             </motion.div>
           </motion.div>
         </section>
@@ -457,13 +511,13 @@ const Home = () => {
             viewport={SCROLL_VIEWPORT}
           >
             <motion.div className="why-choose-header mb-12 md:mb-16" variants={revealUp}>
-              <p className="hero-eyebrow mx-auto mb-5 max-w-2xl text-center sm:mb-6">
+              <p className="hero-eyebrow mx-auto mb-4 max-w-2xl text-center sm:mb-5">
                 The NorthVault difference
               </p>
+              <HandwriteAccent as="h2" size="title" className="mb-4 md:mb-5">
+                Why Choose Us
+              </HandwriteAccent>
               <div className="why-choose-headline mx-auto w-full max-w-6xl">
-                <p className="type-display mx-auto mb-3 w-full text-center text-[clamp(1.35rem,3.5vw,2.25rem)] font-bold leading-tight text-[var(--text-primary)]/90 md:mb-4">
-                  Why choose us for
-                </p>
                 <div className="why-choose-loop relative flex w-full justify-center py-1 md:py-2">
                   <LoopingWords
                     className="relative z-[1] w-full max-w-3xl px-2 sm:max-w-4xl sm:px-0"
@@ -474,27 +528,34 @@ const Home = () => {
                     selectorPaddingX={16}
                   />
                 </div>
-                <p className="editorial-body mx-auto mt-6 max-w-lg text-center text-sm text-secondary md:mt-8 md:text-base">
+                <HandwriteAccent tone="soft" className="mt-4 md:mt-5">
+                  Same Team → Bigger Impact
+                </HandwriteAccent>
+                <p className="editorial-body mx-auto mt-5 whitespace-nowrap px-2 text-center text-[clamp(0.7rem,2.35vw,1rem)] text-secondary md:mt-6">
                   One studio for web, apps, brand, and cloud—built to move fast without cutting corners.
                 </p>
               </div>
             </motion.div>
-            <motion.div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 md:gap-10">
+            <motion.div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:gap-6">
               {WHY_CHOOSE_US.map((item, index) => (
                 <motion.article
                   key={item.title}
                   variants={scrollStaggerItem}
-                  className="why-choose-card group relative overflow-hidden rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] p-6 transition-[border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-[#ff6b00]/50 hover:shadow-[0_12px_32px_var(--glass-glow)] active:scale-[0.99] md:p-8"
+                  className="why-choose-card group relative overflow-hidden rounded-xl border border-[var(--glass-border)] bg-[var(--glass-bg)] p-5 transition-[border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-[#ff6b00]/50 hover:shadow-[0_12px_32px_var(--glass-glow)] active:scale-[0.99] sm:p-6 md:p-7"
                 >
                   <div
                     className="why-choose-card-glow pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full"
                     aria-hidden
                   />
-                  <span className="mb-4 block font-mono text-[clamp(1.75rem,5vw,2.5rem)] font-black leading-none text-[#ff6b00]">
+                  <span className="mb-3 block font-mono text-[clamp(1.35rem,3.5vw,1.85rem)] font-black leading-none text-[#ff6b00]">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="type-display-sm mb-3 md:text-2xl">{item.title}</h3>
-                  <p className="editorial-body text-sm text-secondary md:text-base">{item.description}</p>
+                  <h3 className="type-display-sm mb-2 text-lg leading-tight md:mb-2.5 md:text-xl">
+                    {item.title}
+                  </h3>
+                  <p className="editorial-body text-sm leading-relaxed text-secondary md:text-[0.95rem]">
+                    {item.description}
+                  </p>
                 </motion.article>
               ))}
             </motion.div>
@@ -515,11 +576,12 @@ const Home = () => {
             <p className="mb-2 text-center text-[10px] uppercase tracking-[0.35em] text-secondary md:text-xs">
               Client outcomes
             </p>
-            <WordReveal
-              as="h2"
-              className="section-heading mb-3 text-center sm:mb-4"
-              text="What Our Clients Say"
-            />
+            <HandwriteAccent as="h2" size="title" className="mb-2 sm:mb-3">
+              What Our Clients Say
+            </HandwriteAccent>
+            <HandwriteAccent tone="soft" className="mb-3 sm:mb-4">
+              Real Clients → Real Wins
+            </HandwriteAccent>
             <p className="editorial-body mx-auto mb-6 max-w-xl text-center text-sm sm:mb-8">
               Real teams. Measurable results. Built to last.
             </p>
@@ -543,14 +605,15 @@ const Home = () => {
               <li>NDA on request</li>
             </ul>
             <div className="text-center">
-              <LineReveal
-                as="h2"
-                className="display-heading"
-                lines={["Let's Build Something"]}
-              />
+              <HandwriteAccent as="h2" size="title">
+                Let's Build Something
+              </HandwriteAccent>
+              <HandwriteAccent tone="soft" className="mt-2 md:mt-3">
+                Let's Build What's Next
+              </HandwriteAccent>
               <motion.a
                 href={MAILTO}
-                className="mt-4 inline-block break-all text-lg font-light tracking-tight transition-opacity hover:opacity-80 focus-visible:opacity-90 md:mt-5 md:text-2xl"
+                className="mt-4 inline-block break-all transition-opacity hover:opacity-80 focus-visible:opacity-90 md:mt-5"
                 variants={revealUp}
               >
                 <BrandedEmail />
