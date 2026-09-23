@@ -2,40 +2,8 @@ import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { FaLinkedin, FaInstagram } from 'react-icons/fa'
 import BrandLogo from './BrandLogo'
-import { SCROLL_VIEWPORT_LOOSE as VIEWPORT } from './ScrollReveal'
-import { CINEMATIC_EASE, MOTION_DURATION, MOTION_STAGGER } from '../motion/cinematic'
-
-const footerVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: MOTION_DURATION,
-      ease: CINEMATIC_EASE,
-      staggerChildren: MOTION_STAGGER + 0.03,
-      delayChildren: 0.06,
-    },
-  },
-}
-
-const childVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: MOTION_DURATION, ease: CINEMATIC_EASE },
-  },
-}
-
-const brandVariants = {
-  hidden: { opacity: 0, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: MOTION_DURATION + 0.1, ease: CINEMATIC_EASE },
-  },
-}
+import GsapReveal from './GsapReveal'
+import { CINEMATIC_EASE } from '../motion/cinematic'
 
 const socialLinks = [
   { name: 'LinkedIn', icon: FaLinkedin, url: 'https://www.linkedin.com/company/northvaultstudios/' },
@@ -48,28 +16,24 @@ const socialLinks = [
 
 const Footer = () => (
   <footer className="relative overflow-x-clip border-t border-[var(--glass-border)] bg-[var(--bg-primary)]">
-    <motion.div
+    <GsapReveal
       className="site-shell relative z-[1] section-pad py-14 md:py-16"
-      variants={footerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={VIEWPORT}
+      stagger={0.1}
+      y={24}
+      start="top 90%"
     >
       <div className="flex flex-col items-center text-center">
-        <motion.div
+        <div
           className="footer-brand-wrap flex w-full max-w-full items-center justify-center py-8 md:py-12"
-          variants={brandVariants}
+          data-reveal
         >
-          <span
-            className="footer-brand-mark pointer-events-none select-none"
-            aria-hidden
-          >
+          <span className="footer-brand-mark pointer-events-none select-none" aria-hidden>
             <span className="footer-brand-mark__nv">NV</span>
             <span className="footer-brand-mark__studios">Studios..</span>
           </span>
-        </motion.div>
+        </div>
 
-        <motion.div variants={childVariants} className="mt-2 max-w-md">
+        <div className="mt-2 max-w-md" data-reveal>
           <p className="text-lg font-semibold tracking-tight">
             <BrandLogo className="brand-logo--footer" />
           </p>
@@ -81,9 +45,9 @@ const Footer = () => (
             <li>Chandigarh, India</li>
             <li>NDA on request</li>
           </ul>
-        </motion.div>
+        </div>
 
-        <motion.div variants={childVariants} className="mt-8 md:mt-10">
+        <div className="mt-8 md:mt-10" data-reveal>
           <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-secondary">Follow Us</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             {socialLinks.map((social) => {
@@ -117,18 +81,18 @@ const Footer = () => (
               )
             })}
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      <div className="footer-divider-glow mt-10 md:mt-12" aria-hidden />
-      <div className="mt-8 border-t border-[var(--glass-border)] pt-6 md:mt-10 md:pt-8">
+      <div className="footer-divider-glow mt-10 md:mt-12" aria-hidden data-reveal />
+      <div className="mt-8 border-t border-[var(--glass-border)] pt-6 md:mt-10 md:pt-8" data-reveal>
         <p className="text-center text-xs uppercase tracking-[0.2em] text-secondary">
           &copy; {new Date().getFullYear()}{' '}
           <span className="text-[#ff6b00]">NorthVault</span>
           <span className="text-[var(--text-primary)]">Studios</span>. All rights reserved.
         </p>
       </div>
-    </motion.div>
+    </GsapReveal>
   </footer>
 )
 

@@ -1,9 +1,11 @@
 import { memo } from 'react'
 import { cn } from './lib/utils'
+import MaskedWords from './MaskedWords'
 
 /**
  * Caveat script line — use size="title" for section names,
  * default for unique taglines per section.
+ * Pass `masked` for enter-only GSAP word rise (via GsapReveal).
  */
 function HandwriteAccent({
   children,
@@ -12,7 +14,15 @@ function HandwriteAccent({
   align = 'center',
   size = 'md',
   as: Tag = 'p',
+  masked = false,
 }) {
+  const content =
+    masked && (typeof children === 'string' || typeof children === 'number') ? (
+      <MaskedWords text={String(children)} />
+    ) : (
+      children
+    )
+
   return (
     <Tag
       className={cn(
@@ -24,7 +34,7 @@ function HandwriteAccent({
         className,
       )}
     >
-      {children}
+      {content}
     </Tag>
   )
 }

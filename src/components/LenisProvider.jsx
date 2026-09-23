@@ -1,7 +1,11 @@
 import { useEffect, useRef } from 'react'
 import Lenis from 'lenis'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { LenisContext } from '../context/LenisContext'
 import { setLenisInstance } from '../utils/lenis'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function LenisProvider({ children }) {
   const lenisRef = useRef(null)
@@ -34,8 +38,13 @@ export default function LenisProvider({ children }) {
     setLenisInstance(lenis)
     document.documentElement.classList.add('lenis-ready')
 
+    const onScroll = () => ScrollTrigger.update()
+    lenis.on('scroll', onScroll)
+    requestAnimationFrame(() => ScrollTrigger.refresh())
+
     const onReducedMotionChange = (event) => {
       if (event.matches) {
+        lenis.off('scroll', onScroll)
         lenis.destroy()
         lenisRef.current = null
         setLenisInstance(null)
@@ -45,6 +54,7 @@ export default function LenisProvider({ children }) {
 
     return () => {
       reducedMotion.removeEventListener('change', onReducedMotionChange)
+      lenis.off('scroll', onScroll)
       document.documentElement.classList.remove('lenis-ready')
       lenis.destroy()
       lenisRef.current = null
