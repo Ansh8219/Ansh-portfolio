@@ -1,12 +1,21 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaWhatsapp } from 'react-icons/fa'
 import { CINEMATIC_EASE, UI_HOVER_SCALE, UI_TAP_SCALE, UI_HOVER_TRANSITION } from '../motion/cinematic'
 
 const WhatsAppButton = memo(() => {
   const whatsappNumber = '918219698580'
-  const message = encodeURIComponent('Hello! I would like to know more about your services.')
+  const message = encodeURIComponent('Hi Ansh! I saw your portfolio and would like to talk about a project.')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`
+
+  // Hidden until the visitor scrolls a little, so it never covers the hero buttons on phones.
+  const [shown, setShown] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setShown(window.scrollY > 320)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <motion.a
@@ -17,8 +26,10 @@ const WhatsAppButton = memo(() => {
       whileHover={{ scale: UI_HOVER_SCALE, transition: UI_HOVER_TRANSITION }}
       whileTap={{ scale: UI_TAP_SCALE, transition: UI_HOVER_TRANSITION }}
       initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 1.2, duration: 0.55, ease: CINEMATIC_EASE }}
+      animate={shown ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+      style={{ pointerEvents: shown ? 'auto' : 'none' }}
+      tabIndex={shown ? 0 : -1}
+      transition={{ duration: 0.4, ease: CINEMATIC_EASE }}
       aria-label="Message Ansh on WhatsApp"
     >
       <FaWhatsapp className="text-2xl" />

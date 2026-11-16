@@ -149,8 +149,8 @@ function HeroAtlas() {
       </div>
 
       <div className="at-hero__foot" data-intro>
-        <span>Fig. 01 · Full stack, AI &amp; DevOps</span>
-        <span>Ansh · 4+ years</span>
+        <span>Fig. 01 · Full stack &amp; AI</span>
+        <span>4+ years</span>
       </div>
     </section>
   )
