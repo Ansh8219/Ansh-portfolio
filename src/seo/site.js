@@ -8,7 +8,7 @@
  * domain can never end up in canonicals, the sitemap or JSON-LD.
  */
 
-export const SITE_NAME = 'NorthVaultStudios'
+export const SITE_NAME = 'Ansh'
 
 /**
  * Business facts used in JSON-LD. Every value below already appears on the
@@ -18,14 +18,14 @@ export const SITE_NAME = 'NorthVaultStudios'
  */
 export const ORGANIZATION = {
   name: SITE_NAME,
-  email: 'hello@northvaultstudios.com',
-  telephone: '+918219268903',
-  addressLocality: 'Chandigarh',
+  email: 'ansh.dev721@gmail.com',
+  telephone: '+918219698580',
   addressCountry: 'IN',
-  logoPath: '/NorthVaultStudios_icon.png',
+  logoPath: '/Ansh_icon.png',
+  addressLocality: 'Chandigarh / Mohali',
   sameAs: [
-    'https://www.linkedin.com/company/northvaultstudios/',
-    'https://www.instagram.com/northvaultstudios/',
+    'https://www.linkedin.com/in/ansh-kumar-18b63a270/',
+    'https://github.com/Ansh8219',
   ],
 }
 

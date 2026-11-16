@@ -52,12 +52,12 @@ import {
  * block fill (--c) and the readable text colour on it (--on).
  */
 export const DISCIPLINES = {
-  ai: { label: 'AI & Intelligent Systems', cls: 'd-ai', Icon: Bot },
-  software: { label: 'Software & Product Engineering', cls: 'd-software', Icon: Boxes },
-  web: { label: 'Web & Mobile Development', cls: 'd-web', Icon: FaMobileAlt },
-  cloud: { label: 'Backend, Cloud & Infrastructure', cls: 'd-cloud', Icon: FaCloud },
-  data: { label: 'Data & Quality Engineering', cls: 'd-data', Icon: Workflow },
-  brand: { label: 'Brand, Marketing & Social Media', cls: 'd-brand', Icon: FaBullhorn },
+  ai: { label: 'AI Development', cls: 'd-ai', Icon: Bot },
+  software: { label: 'System Architecture', cls: 'd-software', Icon: Boxes },
+  web: { label: 'Frontend & Mobile', cls: 'd-web', Icon: FaMobileAlt },
+  cloud: { label: 'Cloud & DevOps', cls: 'd-cloud', Icon: FaCloud },
+  data: { label: 'Python Backend', cls: 'd-data', Icon: Workflow },
+  brand: { label: 'Full Stack Products', cls: 'd-brand', Icon: FaBullhorn },
 }
 
 /**
@@ -96,76 +96,51 @@ export const ART = {
 export const SERVICES = [
   {
     key: 'ai',
-    name: 'AI & Intelligent Systems',
+    name: 'AI Development',
     description:
-      'AI agents, RAG, voice and generative AI on commercial or open-weight models, automating work and making products smarter.',
+      'AI agents, RAG and LLM integrations on commercial or open-weight models, automating work and making products smarter.',
     ...ART.ai,
-    features: [
-      'AI Agents & Assistants',
-      'RAG & Knowledge Systems',
-      'Voice & Multimodal AI',
-      'AI Workflow Automation',
-      'Document Intelligence',
-    ],
+    features: ['AI Agents & Assistants', 'RAG & Knowledge Systems', 'LLM Integrations', 'Voice & Multimodal AI', 'AI Workflow Automation'],
   },
   {
     key: 'software',
-    name: 'Software & Product Engineering',
+    name: 'System Architecture',
     description:
-      'Custom software and complete products, from discovery to launch and support, built around how your business works.',
+      'Service boundaries, data models, queues and caching designed up front, so the product can grow without a rewrite.',
     ...ART.software,
-    features: [
-      'Custom Software',
-      'MVPs & Products',
-      'Admin Platforms',
-      'Business Process Automation',
-      'C# / .NET Systems',
-      'Tech Consulting',
-    ],
+    features: ['System Design', 'Microservices', 'Database Design', 'Scalability Planning', 'Technical Consulting'],
   },
   {
     key: 'web',
-    name: 'Web & Mobile Development',
+    name: 'Frontend & Mobile',
     description:
-      'Fast, responsive web platforms and iOS and Android apps in React, Next.js, Flutter or React Native, with UI/UX built in.',
+      'React web apps and admin panels, and Flutter apps for iOS and Android, wired to the backend I build.',
     ...ART.web,
-    features: ['Web Platforms', 'React & Next.js', 'Flutter & React Native', 'iOS & Android', 'UI/UX Design'],
+    features: ['React Web Apps', 'Admin Dashboards', 'Flutter iOS & Android', 'Store Releases'],
   },
   {
     key: 'cloud',
-    name: 'Backend, Cloud & Infrastructure',
+    name: 'Cloud & DevOps',
     description:
-      'Secure APIs, integrations and cloud infrastructure on AWS or Azure that keep your product fast, reliable and scalable.',
+      'AWS infrastructure, containers and CI/CD pipelines that keep releases routine and the product reliable.',
     ...ART.cloud,
-    features: ['APIs & Integrations', 'Microservices', 'AWS & Azure', 'Docker & Kubernetes', 'CI/CD & DevOps'],
+    features: ['AWS', 'Docker & Kubernetes', 'CI/CD', 'Linux', 'Monitoring'],
   },
   {
     key: 'data',
-    name: 'Data & Quality Engineering',
+    name: 'Python Backend',
     description:
-      'Reliable data, analytics and testing, so your decisions and releases rest on information you can trust.',
+      'Django and FastAPI backends with PostgreSQL, Redis and Celery: my main craft, built clean, tested and easy to extend.',
     ...ART.data,
-    features: [
-      'Data Engineering',
-      'Analytics & Reporting',
-      'Test Automation',
-      'Browser Automation',
-      'Quality Assurance',
-    ],
+    features: ['Django & DRF', 'FastAPI', 'PostgreSQL & Redis', 'Celery Jobs', 'API Integrations'],
   },
   {
     key: 'brand',
-    name: 'Brand, Marketing & Social Media',
+    name: 'Full Stack Products',
     description:
-      'Brand identity, digital marketing and social media management from our creative team, so your product is easy to find, trust and remember.',
+      'Whole products from idea to release: backend, admin panel, mobile app and deployment, handled end to end.',
     ...ART.brand,
-    features: [
-      'Brand Identity',
-      'Logo Design',
-      'Digital Marketing',
-      'Social Media Management',
-      'Content Creation',
-    ],
+    features: ['MVPs & Products', 'Admin Platforms', 'Backend + Web + Mobile', 'Launch & Support'],
   },
 ]
 
@@ -218,29 +193,17 @@ export const PROJECTS = [
 ]
 
 export const WHY_CHOOSE_US = [
-  {
-    title: 'Multidisciplinary engineers',
-    description: 'AI, backend, mobile, cloud and QA expertise in one team.',
-  },
-  {
-    title: 'Engineering + creative',
-    description: 'Developers and creative professionals in one team, from code to brand.',
-  },
-  {
-    title: 'End-to-end delivery',
-    description: 'Discovery, design, build, launch and ongoing support.',
-  },
-  {
-    title: 'Built for production',
-    description: 'Containerised and deployed on AWS from the start.',
-  },
+  { title: 'Architecture first', description: 'Systems designed to scale before they are built.' },
+  { title: 'Full stack range', description: 'Backend, web, mobile and cloud from one engineer.' },
+  { title: 'End-to-end delivery', description: 'Design, build, deploy and support.' },
+  { title: 'Built for production', description: 'Containerised and deployed on AWS from the start.' },
 ]
 
 export const WHO_WE_ARE_P1 =
-  'NorthVault Studios is a digital engineering and AI solutions studio: a multidisciplinary team of developers and creative professionals. We work across AI, software, web and mobile, backend, cloud and data, plus brand, marketing and social media.'
+  'I’m Ansh, a full stack and AI developer with 4+ years of experience. I mainly design system architecture and build Python backends in Django and FastAPI, with React and Flutter on the front, and I work across cloud and DevOps.'
 
 export const WHO_WE_ARE_P2 =
-  'Our recent work includes a venue-booking platform in Dubai, a multi-business food delivery system and a catering operations app. One team designs, builds, launches and keeps supporting what it ships.'
+  'Recent work includes a venue-booking platform in Dubai, a multi-business food delivery system and a catering management app. I design, build, deploy and keep supporting what I ship.'
 
 /** Stack, grouped into three marquee rows. */
 export const STACK_ROWS = [
@@ -297,25 +260,23 @@ export const STACK_ROWS = [
 ]
 
 export const SOCIAL_LINKS = [
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/company/northvaultstudios/' },
-  {
-    name: 'Instagram',
-    url: 'https://www.instagram.com/northvaultstudios?igsh=MWVhejFtcjd4Nmo2aQ%3D%3D&utm_source=qr',
-  },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/ansh-kumar-18b63a270/' },
+  { name: 'GitHub', url: 'https://github.com/Ansh8219' },
 ]
 
 export const NAV_LINKS = [
   { label: 'Approach', to: '/approach', id: 'services' },
   { label: 'Work', to: '/work', id: 'work' },
   { label: 'About', to: '/about', id: 'who-we-are' },
+  { label: 'Resume', to: '/resume', id: 'resume' },
   { label: 'Contact', to: '/contact', id: 'contact' },
 ]
 
 export const HERO_DISCIPLINES = [
   'AI & agents',
-  'Software',
-  'Web & mobile',
+  'System architecture',
+  'React & Flutter',
   'Cloud & DevOps',
-  'Data & QA',
-  'Brand & marketing',
+  'Python backend',
+  'Full stack products',
 ]

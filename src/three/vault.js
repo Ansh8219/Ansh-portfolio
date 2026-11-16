@@ -1,5 +1,5 @@
 /**
- * NorthVault assistant bot: a solid, product-style 3D character whose head is a screen, built
+ * Ansh assistant bot: a solid, product-style 3D character whose head is a screen, built
  * procedurally with three.js.
  * Loaded lazily by VaultStage, client-side only. No model files, no image textures: the only
  * texture is a small canvas drawn at runtime for the front display.
@@ -85,7 +85,7 @@ function createDisplay() {
   texture.colorSpace = SRGBColorSpace
   texture.anisotropy = 4
 
-  let state = { word: 'NV', sub: 'NorthVault · ready', color: ACCENT }
+  let state = { word: 'AN', sub: 'Ansh · ready', color: ACCENT }
   let cursorOn = true
   let eyesOpen = true
   let gazeX = 0
@@ -432,7 +432,7 @@ export function createVault(container) {
      */
     setDisplay(next) {
       if (!next) {
-        display.set({ word: 'NV', sub: 'NorthVault · ready', color: ACCENT })
+        display.set({ word: 'AN', sub: 'Ansh · ready', color: ACCENT })
         hueTarget.set(ACCENT)
         return
       }

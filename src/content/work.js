@@ -13,13 +13,13 @@ const PLAY_UNIFEAST = 'https://play.google.com/store/apps/details?id=com.app.uni
 export const WORK_CASES = [
   {
     key: 'northvault',
-    title: 'NorthVaultStudios',
+    title: 'This portfolio',
     category: 'This website',
     lead: 'ai',
     status: { tone: 'self', label: 'You are here' },
-    summary: 'Our own site: animated, prerendered for search, and built to be fast and accessible.',
+    summary: 'My own site: animated, prerendered for search, and built to be fast and accessible.',
     about:
-      'The studio site you are on. Scroll-driven motion, a 3D vault scene on desktop, a light and dark theme, and static prerendering so every page is readable without JavaScript. It respects reduced-motion settings.',
+      'The portfolio site you are on. Scroll-driven motion, a 3D vault scene on desktop, a light and dark theme, and static prerendering so every page is readable without JavaScript. It respects reduced-motion settings.',
     parts: [
       { name: 'Motion', text: 'GSAP and Lenis for scroll-driven animation and smooth scrolling.' },
       { name: '3D', text: 'A Three.js vault scene on larger screens only.' },

@@ -15,7 +15,7 @@ const Work = memo(() => {
           <SectionLabel>Work</SectionLabel>
           <h1 id="work-title" className="at-ap-hero__title">
             <span className="at-ab-hero__ln" data-ln>
-              <span data-ln-in>Our work</span>
+              <span data-ln-in>My work</span>
             </span>
           </h1>
           <p className="at-ap-hero__statement" data-fx="fill">
@@ -55,7 +55,7 @@ const Work = memo(() => {
               </span>
             </Link>
             <a href={MAILTO} className="at-arrow-link">
-              hello@northvaultstudios.com
+              ansh.dev721@gmail.com
               <ArrowUpRight aria-hidden="true" size={16} />
             </a>
           </div>

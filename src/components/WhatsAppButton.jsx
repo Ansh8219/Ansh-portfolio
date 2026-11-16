@@ -4,7 +4,7 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { CINEMATIC_EASE, UI_HOVER_SCALE, UI_TAP_SCALE, UI_HOVER_TRANSITION } from '../motion/cinematic'
 
 const WhatsAppButton = memo(() => {
-  const whatsappNumber = '918219268903'
+  const whatsappNumber = '918219698580'
   const message = encodeURIComponent('Hello! I would like to know more about your services.')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`
 
@@ -19,7 +19,7 @@ const WhatsAppButton = memo(() => {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 1.2, duration: 0.55, ease: CINEMATIC_EASE }}
-      aria-label="Contact us on WhatsApp"
+      aria-label="Message Ansh on WhatsApp"
     >
       <FaWhatsapp className="text-2xl" />
     </motion.a>

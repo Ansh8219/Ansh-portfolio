@@ -34,7 +34,7 @@ const STEPS = [
     title: 'Plan',
     tone: 'paper',
     kind: 'check',
-    text: 'We turn the answers into a written plan: architecture, scope, timeline and cost, so there are no surprises later.',
+    text: 'I turn the answers into a written plan: architecture, scope, timeline and cost, so there are no surprises later.',
     win: { title: 'plan / scope.md', tag: 'Scope' },
     lines: [
       { t: 'Architecture and stack agreed' },
@@ -49,14 +49,14 @@ const STEPS = [
     title: 'Design',
     tone: 'dark',
     kind: 'swatch',
-    text: 'Flows, screens and a design system, reviewed with you as a clickable prototype before anything is built.',
-    win: { title: 'design / flows.fig', tag: 'Design' },
+    text: 'Architecture diagrams, API contracts and the data model, reviewed with you before anything is built.',
+    win: { title: 'design / architecture.md', tag: 'Design' },
     lines: [
-      { t: 'Flows mapped screen by screen', c: 'ai' },
-      { t: 'Type, colour and components', c: 'software' },
-      { t: 'Every state: empty, loading, error', c: 'web' },
-      { t: 'Clickable prototype, reviewed with you', c: 'cloud' },
-      { t: 'Brand carried through every screen', c: 'brand' },
+      { t: 'Services and boundaries mapped', c: 'ai' },
+      { t: 'Database schema and migrations', c: 'software' },
+      { t: 'API contracts: requests, responses, errors', c: 'web' },
+      { t: 'Infrastructure and deployment plan', c: 'cloud' },
+      { t: 'UI flows for web and mobile', c: 'brand' },
     ],
   },
   {
@@ -79,7 +79,7 @@ const STEPS = [
     title: 'Launch',
     tone: 'paper',
     kind: 'check',
-    text: 'Testing, deployment and handover on production infrastructure. Then we stay on: monitoring, fixes and the next round of improvements.',
+    text: 'Testing, deployment and handover on production infrastructure. Then I stay on: monitoring, fixes and the next round of improvements.',
     win: { title: 'ops / launch.checklist', tag: 'Live' },
     lines: [
       { t: 'Tests passing' },
@@ -92,18 +92,18 @@ const STEPS = [
 ]
 
 const RULES = [
-  { title: 'One team, one thread', text: 'The people who plan your product are the people who build it. No hand-offs, no lost context.' },
+  { title: 'One engineer, one thread', text: 'The person who plans your product is the person who builds it. No hand-offs, no lost context.' },
   { title: 'Working software, early', text: 'A running build at the end of every sprint, so you review the real thing instead of slides about it.' },
   { title: 'Plain-language updates', text: 'Short, regular updates in words you do not need a glossary for.' },
   { title: 'Built to be supported', text: 'Documented, tested and deployed so it can keep growing after launch. NDA on request.' },
 ]
 
 const FAQ = [
-  { q: 'How does a project start?', a: 'With a short call. We ask about the goal, the users and what already exists, then send a written plan with scope, timeline and cost.' },
+  { q: 'How does a project start?', a: 'With a short call. I ask about the goal, the users and what already exists, then send a written plan with scope, timeline and cost.' },
   { q: 'How long does a project take?', a: 'It depends on the scope. A focused first version is often a matter of weeks; larger platforms run in phases. You get a timeline in the plan before anything starts.' },
-  { q: 'Can you work with an existing product?', a: 'Yes. We review what is there first, then improve, extend or rebuild only the parts that need it.' },
-  { q: 'Who will I talk to during the project?', a: 'One point of contact, backed by the engineers and designers doing the work.' },
-  { q: 'What happens after launch?', a: 'We stay on. Monitoring, fixes and the next round of improvements are part of how we work, not an afterthought.' },
+  { q: 'Can you work with an existing product?', a: 'Yes. I review what is there first, then improve, extend or rebuild only the parts that need it.' },
+  { q: 'Who will I talk to during the project?', a: 'Me, directly. You talk to the engineer doing the work.' },
+  { q: 'What happens after launch?', a: 'I stay on. Monitoring, fixes and the next round of improvements are part of how I work, not an afterthought.' },
   { q: 'Can we sign an NDA?', a: 'Yes, on request, before we discuss anything sensitive.' },
 ]
 
@@ -286,7 +286,7 @@ const Approach = memo(() => (
           </span>
         </h1>
         <p className="at-ap-hero__statement" data-fx="fill">
-          This is how a project runs with us, from the first conversation to the day your product goes live, and the support that follows.
+          This is how a project runs with me, from the first conversation to the day your product goes live, and the support that follows.
         </p>
       </div>
     </section>
@@ -321,9 +321,9 @@ const Approach = memo(() => (
         <div className="at-ap-faq__intro">
           <SectionLabel>Questions</SectionLabel>
           <h2 id="faq-title" className="at-h2" data-fx="lines">
-            Questions we hear a lot.
+            Questions I hear a lot.
           </h2>
-          <p className="at-head__sub">Not here? Ask us directly. We reply within 24 hours.</p>
+          <p className="at-head__sub">Not here? Ask me directly.</p>
         </div>
         <ul className="at-ap-qs" data-fx="stagger">
           {FAQ.map((item, index) => (
@@ -358,7 +358,7 @@ const Approach = memo(() => (
             </span>
           </Link>
           <a href={MAILTO} className="at-arrow-link">
-            hello@northvaultstudios.com
+            ansh.dev721@gmail.com
             <ArrowUpRight aria-hidden="true" size={16} />
           </a>
         </div>

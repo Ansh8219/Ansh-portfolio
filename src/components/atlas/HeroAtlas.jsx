@@ -102,7 +102,7 @@ function HeroAtlas() {
   )
 
   return (
-    <section id="hero" ref={rootRef} className="at-hero" aria-label="NorthVault Studios introduction">
+    <section id="hero" ref={rootRef} className="at-hero" aria-label="Ansh introduction">
       <div className="at-hero__figure" data-figure aria-hidden="true">
         <span className="at-hero__ring at-hero__ring--outer" data-ring />
         <span className="at-hero__ring at-hero__ring--inner" data-ring />
@@ -126,31 +126,31 @@ function HeroAtlas() {
 
       <div className="at-hero__headline" data-headline>
         <h1 className="at-hero__h1" data-h1 data-intro>
-          <span className="at-hero__l1">We Engineer</span> <span className="at-hero__l2">What’s Next.</span>
+          <span className="at-hero__l1">I Engineer</span> <span className="at-hero__l2">What’s Next.</span>
         </h1>
       </div>
 
       <div className="at-hero__aside">
         <p className="at-hero__lead" data-intro>
-          NorthVault Studios is a digital engineering and AI solutions studio. We build AI systems, software, web and
-          mobile products and cloud platforms, plus the brand to launch them.
+          I’m Ansh, a full stack, AI and DevOps engineer with 4+ years of experience. I design system architecture
+          and build Python backends, React and Flutter apps, and the cloud infrastructure that runs them.
         </p>
         <div className="at-hero__cta" data-intro>
           <a href="#work" onClick={scrollToWork} className="at-btn at-btn--arrow">
-            <span>View our work</span>
+            <span>View my work</span>
             <span className="at-btn__cell" aria-hidden="true">
               <ArrowUpRight size={18} />
             </span>
           </a>
           <Link to="/contact" className="at-btn at-btn--ghost">
-            Start a project
+            Hire me
           </Link>
         </div>
       </div>
 
       <div className="at-hero__foot" data-intro>
-        <span>Fig. 01 · Digital engineering &amp; AI solutions</span>
-        <span>Chandigarh, India</span>
+        <span>Fig. 01 · Full stack, AI &amp; DevOps</span>
+        <span>Ansh · 4+ years</span>
       </div>
     </section>
   )

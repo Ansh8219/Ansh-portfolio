@@ -119,7 +119,7 @@ function WorkAtlas() {
         <div className="at-wrap wp-top">
           <SectionLabel>Selected work</SectionLabel>
           <h2 id="work-title" className="wp-heading">
-            Work we’ve shipped.
+            Work I’ve shipped.
           </h2>
           <ol className="wp-index" aria-label="Projects">
             {ITEMS.map((item, i) => (

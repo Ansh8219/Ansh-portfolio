@@ -1,16 +1,16 @@
 import { memo } from 'react'
 
 /**
- * Static illustration of the NorthVault assistant bot (same character as the WebGL scene).
+ * Static illustration of the Ansh assistant bot (same character as the WebGL scene).
  * Server-rendered, and the visual used on mobile, with reduced motion, without WebGL and when
  * the 3D flag is off. Fixed coordinates only, so server and client output are identical.
  *
- * variant: 'hero' ("NV" on the screen) | 'services' ("</>" on the screen) | 'door' (waving)
+ * variant: 'hero' ("AN" on the screen) | 'services' ("</>" on the screen) | 'door' (waving)
  * (The prop and class names keep their old "vault" / "door" spelling so existing layout CSS still applies.)
  */
 function VaultPoster({ variant = 'hero', className = '', label }) {
   const waving = variant === 'door'
-  const word = label ?? (variant === 'services' ? '</>' : 'NV')
+  const word = label ?? (variant === 'services' ? '</>' : 'AN')
   return (
     <svg
       className={`at-poster at-poster--${variant} ${className}`}

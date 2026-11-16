@@ -180,7 +180,7 @@ const Footer = () => {
         <div className="at-footer__grid">
           <div className="at-footer__contact" data-rise>
             <a href={MAILTO} className="at-footer__email">
-              hello@northvaultstudios.com
+              ansh.dev721@gmail.com
             </a>
             <Link to="/contact" className="at-arrow-link">
               Start a project
@@ -199,16 +199,16 @@ const Footer = () => {
 
           <div className="at-footer__info" data-rise>
             <p>
-              NorthVault Studios
+              Ansh
               <br />
-              Digital Engineering &amp; AI Solutions Studio
+              Full Stack, AI &amp; DevOps Engineer
               <br />
-              Chandigarh, India
+              Chandigarh / Mohali, India
             </p>
             <p>
-              <a href="tel:+918219268903">+91 8219268903</a>
+              <a href="tel:+918219698580">+91 8219698580</a>
             </p>
-            <p>Reply within 24h · NDA on request</p>
+            <p>4+ years of experience · NDA on request</p>
             <p className="at-footer__social">
               {SOCIAL_LINKS.map(({ name, url }) => (
                 <a key={name} href={url} target="_blank" rel="noopener noreferrer">
@@ -229,7 +229,7 @@ const Footer = () => {
             </button>
             <Link to="/privacy">Privacy</Link>
             <Link to="/terms">Terms</Link>
-            <span>&copy; {new Date().getFullYear()} NorthVault Studios</span>
+            <span>&copy; {new Date().getFullYear()} Ansh</span>
           </div>
         </div>
       </div>

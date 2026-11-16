@@ -94,3 +94,21 @@
 .lg-h { display: flex; align-items: baseline; gap: 1rem; margin: 0 0 0.9rem; font-weight: 600; font-size: clamp(1.5rem, 2.4vw, 2.1rem); letter-spacing: -0.04em; color: var(--text-primary); }
 .lg-h span { font-family: var(--font-mono); font-weight: 400; font-size: 0.8rem; letter-spacing: 0; color: var(--accent); }
 .lg-p { margin: 0 0 0.9rem; font-size: 1.075rem; line-height: 1.7; color: var(--text-secondary); }
+
+/* ── Resume ───────────────────────────────────────────── */
+.rs-actions { margin-top: clamp(1.25rem, 2.5vw, 2rem); display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2rem; }
+.rs-skill { margin-top: 1.25rem; }
+.rs-skill__h { margin: 0 0 0.6rem; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+.rs-tags { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.rs-tags li { padding: 0.35rem 0.8rem; border: 1px solid var(--rule); font-size: 0.9rem; }
+.rs-list { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.5rem; line-height: 1.55; }
+.rs-project { padding-block: 1rem; border-top: 1px solid var(--rule); }
+.rs-project__t { margin: 0 0 0.4rem; font-weight: 600; font-size: 1.15rem; }
+.rs-project__t span { font-weight: 400; color: var(--text-dim); }
+.rs-project__s { margin: 0.4rem 0 0; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); }
+@media print {
+  .at-nav, .at-menu, .at-footer-wrap, .skip-link, .rs-actions, .lg-toc, [class*="wa-fab"], canvas { display: none !important; }
+  body, .page-root { background: #fff !important; color: #000 !important; }
+  .rs-page .lg-title { font-size: 3rem; }
+  .rs-page .lg-hero { padding-top: 0; }
+}

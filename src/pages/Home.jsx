@@ -4,6 +4,7 @@ import StoryAtlas from '../components/atlas/StoryAtlas'
 import ServicesAtlas from '../components/atlas/ServicesAtlas'
 import WorkAtlas from '../components/atlas/WorkAtlas'
 import OneTeamAtlas from '../components/atlas/OneTeamAtlas'
+import ResumeAtlas from '../components/atlas/ResumeAtlas'
 
 /**
  * Home (Engineered Atlas direction).
@@ -17,6 +18,7 @@ const Home = () => (
     <ServicesAtlas />
     <WorkAtlas />
     <OneTeamAtlas />
+    <ResumeAtlas />
   </div>
 )
 

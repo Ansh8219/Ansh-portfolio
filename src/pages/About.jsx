@@ -9,18 +9,18 @@ const pad = (n) => String(n).padStart(2, '0')
 
 // `count` values tick up from 0 when the row scrolls into view (the server renders the final number)
 const FACTS = [
-  { label: 'Based in', text: 'Chandigarh, India' },
+  { label: 'Experience', text: '4+ years' },
   { label: 'Shipped', count: PROJECTS.length, after: ' platforms' },
-  { label: 'Disciplines', count: SERVICES.length, after: ', one team' },
-  { label: 'Replies', before: 'Within ', count: 24, after: ' hours' },
+  { label: 'Focus areas', count: SERVICES.length, after: ', one engineer' },
+  { label: 'Based in', text: 'Chandigarh / Mohali' },
 ]
 
-const TICKER = ['AI & agents', 'Software', 'Web & mobile', 'Cloud & DevOps', 'Data & QA', 'Brand & marketing']
+const TICKER = ['AI & agents', 'System architecture', 'Python backend', 'React & Flutter', 'Cloud & DevOps', 'Full stack products']
 
 const STEPS = [
   {
     title: 'Discover',
-    text: 'We start with the problem and the goal, not a feature list: who it is for, what success looks like and what is in the way.',
+    text: 'I start with the problem and the goal, not a feature list: who it is for, what success looks like and what is in the way.',
   },
   {
     title: 'Plan',
@@ -36,7 +36,7 @@ const STEPS = [
   },
   {
     title: 'Support',
-    text: 'We stay accountable after launch: monitoring, fixes and the next round of improvements.',
+    text: 'I stay accountable after launch: monitoring, fixes and the next round of improvements.',
   },
 ]
 
@@ -90,7 +90,7 @@ const About = memo(() => (
           </defs>
           <text fontSize="9.6" letterSpacing="1.4">
             <textPath href="#abBadgePath" textLength="286" lengthAdjust="spacing">
-              Engineering + creative · Chandigarh, India ·
+              Full stack · AI · DevOps · Chandigarh · Mohali ·
             </textPath>
           </text>
           <path d="M60 44v30m0 0l-9-9m9 9l9-9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -105,11 +105,11 @@ const About = memo(() => (
         </h1>
         <div className="at-ab-hero__base">
           <p className="at-ab-hero__lead" data-fx="rise" data-delay="0.7">
-            NorthVault Studios is a digital engineering and AI solutions studio in Chandigarh, India. We build software that is meant to last, and we stay with it after launch.
+            I’m Ansh, a full stack, AI and DevOps engineer with 4+ years of experience. I build software that is meant to last, and I stay with it after launch.
           </p>
           <div className="at-cx-hero__meta" data-fx="rise" data-delay="0.85">
-            <span>Studio in Chandigarh</span>
-            <span>Engineering + creative, under one roof</span>
+            <span>Based in Chandigarh / Mohali</span>
+            <span>Architecture, backend, mobile and cloud</span>
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@ const About = memo(() => (
 
     <Ticker />
 
-    {/* Who we are */}
+    {/* About */}
     <section className="at-section at-invert at-ab-who" aria-labelledby="who-title">
       <div className="at-wrap at-ab-who__grid">
         <figure className="at-ab-who__media">
@@ -126,7 +126,7 @@ const About = memo(() => (
               src={ART.studio.image}
               srcSet={`${ART.studio.imageSm} 720w, ${ART.studio.image} ${ART.studio.width}w`}
               sizes="(min-width: 1024px) 34vw, 100vw"
-              alt="A NorthVault Studios desk: laptop with code, wireframe sketches and a desk lamp"
+              alt="A developer desk: laptop with code, wireframe sketches and a desk lamp"
               width={ART.studio.width}
               height={ART.studio.height}
               loading="lazy"
@@ -145,13 +145,13 @@ const About = memo(() => (
             </text>
             <circle cx="60" cy="60" r="7" fill="currentColor" />
           </svg>
-          <figcaption className="at-caption">Fig. 01 · The studio</figcaption>
+          <figcaption className="at-caption">Fig. 01 · The workspace</figcaption>
         </figure>
 
         <div className="at-ab-who__main">
-          <SectionLabel>Who we are</SectionLabel>
+          <SectionLabel>About me</SectionLabel>
           <h2 id="who-title" className="sr-only">
-            Who we are
+            About Ansh
           </h2>
           <p className="at-story__statement" data-fx="fill">
             {WHO_WE_ARE_P1}
@@ -185,9 +185,9 @@ const About = memo(() => (
     <section className="at-section at-ab-do" aria-labelledby="do-title">
       <div className="at-wrap">
         <div className="at-ab-head">
-          <SectionLabel>What we do</SectionLabel>
+          <SectionLabel>What I do</SectionLabel>
           <h2 id="do-title" className="at-h2" data-fx="lines">
-            Six disciplines, one team.
+            Six areas, one engineer.
           </h2>
         </div>
 
@@ -215,7 +215,7 @@ const About = memo(() => (
     <section className="at-section at-invert at-ab-how" aria-labelledby="how-title">
       <div className="at-wrap at-ab-how__grid">
         <div className="at-ab-how__intro">
-          <SectionLabel>How we work</SectionLabel>
+          <SectionLabel>How I work</SectionLabel>
           <h2 id="how-title" className="at-h2" data-fx="lines">
             Clear steps, sharp delivery.
           </h2>
@@ -245,9 +245,9 @@ const About = memo(() => (
     <section className="at-section at-ab-why" aria-labelledby="why-title">
       <div className="at-wrap">
         <div className="at-ab-head">
-          <SectionLabel>Why teams choose us</SectionLabel>
+          <SectionLabel>Why work with me</SectionLabel>
           <h2 id="why-title" className="at-h2" data-fx="lines">
-            We don&apos;t chase trends. We build things that last.
+            I don&apos;t chase trends. I build things that last.
           </h2>
         </div>
 
@@ -269,7 +269,7 @@ const About = memo(() => (
       <div className="at-wrap at-ab-head">
         <SectionLabel>Tools</SectionLabel>
         <h2 id="tools-title" className="at-ab-tools__title" data-fx="lines">
-          What we build with.
+          What I build with.
         </h2>
       </div>
       <div className="at-ab-tools__rows">
@@ -285,7 +285,7 @@ const About = memo(() => (
           </span>
         </Link>
         <Link to="/services" className="at-btn at-btn--ghost">
-          Our services
+          My expertise
         </Link>
       </div>
     </section>

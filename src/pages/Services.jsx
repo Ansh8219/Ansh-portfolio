@@ -37,7 +37,7 @@ function Discipline({ service, index }) {
             {detail.lead}
           </p>
           <span className="sv-rule" data-fx="rule" aria-hidden="true" />
-          <h3 className="sv-block__h">What we do</h3>
+          <h3 className="sv-block__h">What I do</h3>
           <ul className="sv-feats" data-fx="stagger">
             {detail.features.map((feature, i) => (
               <li key={feature} className="sv-feat" data-spot>
@@ -52,7 +52,7 @@ function Discipline({ service, index }) {
               <ArrowUpRight aria-hidden="true" size={16} />
             </Link>
             <Link to="/contact" className="at-arrow-link">
-              Talk to us
+              Talk to me
               <ArrowUpRight aria-hidden="true" size={16} />
             </Link>
           </div>
@@ -105,7 +105,7 @@ const Services = memo(() => (
             </span>
           </Link>
           <a href={MAILTO} className="at-arrow-link">
-            hello@northvaultstudios.com
+            ansh.dev721@gmail.com
             <ArrowUpRight aria-hidden="true" size={16} />
           </a>
         </div>

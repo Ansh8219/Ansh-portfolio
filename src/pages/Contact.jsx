@@ -6,21 +6,21 @@ import { MAILTO } from '../components/BrandedEmail'
 import { useContactForm } from '../hooks/useContactForm'
 import { gsap, SplitText } from '../motion/signal'
 
-const EMAIL = 'hello@northvaultstudios.com'
+const EMAIL = 'ansh.dev721@gmail.com'
 const GREETINGS = ['Hello.', "Let's talk.", 'Say hi.', 'Start here.']
 
-const NEEDS = ['AI & automation', 'Software & product', 'Web & mobile', 'Cloud & backend', 'Data & QA', 'Brand & growth', 'Not sure yet']
+const NEEDS = ['AI & automation', 'System architecture', 'Python backend', 'Web & mobile', 'Cloud & DevOps', 'Full product build', 'Not sure yet']
 const PURPOSES = ['New product', 'Redesign or upgrade', 'Automate a process', 'Something else']
 const TIMINGS = ['As soon as possible', 'Coming months', 'Still exploring']
 
 // How each answer reads inside the sentence "You're looking for … for …, timing: …."
 const PHRASE = {
   'AI & automation': 'AI & automation',
-  'Software & product': 'software & product engineering',
+  'System architecture': 'system architecture',
+  'Python backend': 'a Python backend',
   'Web & mobile': 'web & mobile development',
-  'Cloud & backend': 'cloud & backend',
-  'Data & QA': 'data & QA',
-  'Brand & growth': 'brand & growth',
+  'Cloud & DevOps': 'cloud & DevOps',
+  'Full product build': 'a full product build',
   'Not sure yet': 'some help deciding',
   'New product': 'a new product',
   'Redesign or upgrade': 'a redesign or upgrade',
@@ -77,7 +77,7 @@ function GreetingWord() {
   )
 }
 
-/** Live Chandigarh time with seconds. Placeholders on the server / first render (no hydration mismatch). */
+/** Live India time with seconds. Placeholders on the server / first render (no hydration mismatch). */
 function StudioClock() {
   const [t, setT] = useState(null)
 
@@ -100,7 +100,7 @@ function StudioClock() {
 
   return (
     <div className="at-cx-clock">
-      <p className="at-cx-clock__label">Local time in Chandigarh</p>
+      <p className="at-cx-clock__label">Local time in Chandigarh / Mohali</p>
       <p className="at-cx-clock__time" aria-hidden="true">
         <span>{t?.h ?? '--'}</span>
         <span className="at-cx-clock__colon">:</span>
@@ -156,18 +156,18 @@ const Contact = memo(() => {
 
   return (
     <PageFx className="at-contact-page">
-      {/* Hero: greeting word, rule + studio line, live clock */}
+      {/* Hero: greeting word, rule + location line, live clock */}
       <section className="at-cx-hero" aria-labelledby="contact-title">
         <div className="at-wrap at-cx-hero__inner">
           <SectionLabel>Contact</SectionLabel>
           <h1 id="contact-title" className="sr-only">
-            Contact NorthVault Studios
+            Contact Ansh
           </h1>
           <GreetingWord />
           <div className="at-cx-hero__base">
             <div className="at-cx-hero__meta">
-              <span>Studio in Chandigarh</span>
-              <span>Digital engineering &amp; AI solutions, under one roof</span>
+              <span>Based in Chandigarh / Mohali</span>
+              <span>Full stack, AI &amp; DevOps engineering</span>
             </div>
             <StudioClock />
           </div>
@@ -215,7 +215,7 @@ const Contact = memo(() => {
 
             <div className="at-field">
               <label htmlFor="message">
-                <span className="at-q">06</span>What else should we know?
+                <span className="at-q">06</span>What else should I know?
               </label>
               <textarea id="message" name="message" value={formData.message} onChange={handleChange} required rows={4} placeholder="Goals, current product, links, deadlines" />
             </div>
@@ -236,11 +236,11 @@ const Contact = memo(() => {
                     <ArrowUpRight size={18} />
                   </span>
                 </button>
-                <span className="at-form__hint">Lands straight in our inbox.</span>
+                <span className="at-form__hint">Opens an email to Ansh.</span>
               </div>
               <div role="status" aria-live="polite" aria-atomic="true">
                 {formStatus === 'success' ? (
-                  <p className="at-form__note">Message received — we&apos;ll be in touch within one business day.</p>
+                  <p className="at-form__note">Message received — I&apos;ll be in touch within one business day.</p>
                 ) : null}
                 {formStatus === 'mailto' ? (
                   <p className="at-form__note">
@@ -273,26 +273,26 @@ const Contact = memo(() => {
             </div>
 
             <div className="at-cx-info__block">
-              <p className="at-cx-info__label">Studio</p>
+              <p className="at-cx-info__label">Engineer</p>
               <p className="at-cx-info__text">
-                NorthVault Studios
+                Ansh
                 <br />
-                Digital Engineering &amp; AI Solutions Studio
+                Full Stack, AI &amp; DevOps Engineer
                 <br />
-                Chandigarh, India
+                Chandigarh / Mohali, India
               </p>
             </div>
 
             <div className="at-cx-info__block">
               <p className="at-cx-info__label">Phone</p>
-              <a href="tel:+918219268903" className="at-cx-info__text at-cx-info__link">
-                +91&nbsp;8219268903
+              <a href="tel:+918219698580" className="at-cx-info__text at-cx-info__link">
+                +91&nbsp;8219698580
               </a>
             </div>
 
             <div className="at-cx-info__block">
               <p className="at-cx-info__label">Good to know</p>
-              <p className="at-cx-info__text">Reply within 24 hours · NDA on request</p>
+              <p className="at-cx-info__text">4+ years of experience · NDA on request</p>
             </div>
           </aside>
         </div>

@@ -13,46 +13,53 @@ export const ROUTES = [
   {
     path: '/',
     key: 'home',
-    title: 'NorthVaultStudios | Digital Engineering & AI Solutions Studio',
+    title: 'Ansh | Full Stack, AI & DevOps Engineer',
     description:
-      'Digital engineering and AI solutions studio. AI agents and RAG, software, web and mobile, cloud and DevOps, data and QA, plus brand and marketing.',
+      'Portfolio of Ansh, a full stack, AI and DevOps engineer with 4+ years of experience: system architecture, Python backends (Django, FastAPI), React, Flutter and cloud infrastructure.',
     ogDescription:
-      'Digital engineering and AI solutions studio. We engineer what’s next.',
+      'Full stack, AI and DevOps engineer. I engineer what’s next.',
   },
   {
     path: '/about',
     key: 'about',
-    title: 'About the Studio | NorthVaultStudios',
+    title: 'About Ansh | Full Stack, AI & DevOps Engineer',
     description:
-      'A multidisciplinary team of developers and creative professionals building AI and software products end to end, with brand and marketing under one roof.',
+      'Ansh is a full stack, AI and DevOps engineer with 4+ years of experience building software products end to end.',
   },
   {
     path: '/approach',
     key: 'approach',
-    title: 'Our Approach | NorthVaultStudios',
+    title: 'My Approach | Ansh',
     description:
-      'How a project runs with NorthVault Studios: listen, plan, design, build and launch, with one team from the first conversation to support after launch.',
+      'How a project runs with Ansh: listen, plan, design, build and launch, with one engineer from the first conversation to support after launch.',
   },
   {
     path: '/work',
     key: 'work',
-    title: 'Our Work | NorthVaultStudios',
+    title: 'Work | Ansh',
     description:
-      'Selected work from NorthVault Studios: Befit, Dawat, Unifeast, Vyro and Bookyahook, with the apps, admin panels and backends behind them.',
+      'Selected work by Ansh: Befit, Dawat, Unifeast, Vyro and Bookyahook, with the apps, admin panels and backends behind them.',
   },
   {
     path: '/services',
     key: 'services',
-    title: 'Our Services | NorthVaultStudios',
+    title: 'Expertise | Ansh',
     description:
-      'AI agents and intelligent systems, product engineering, web and mobile, cloud and DevOps, data and QA, brand, marketing and social media.',
+      'AI development, system architecture, Python backends, React and Flutter apps, cloud and DevOps, and full stack product delivery.',
   },
   {
     path: '/contact',
     key: 'contact',
-    title: 'Contact | NorthVaultStudios',
+    title: 'Contact | Ansh',
     description:
-      'Talk to NorthVault Studios about your product, brand or growth goals. Reply within 24 hours. NDA on request. Based in Chandigarh, India.',
+      'Talk to Ansh about your product, backend, app or infrastructure. Email ansh.dev721@gmail.com or call +91 8219698580. NDA on request.',
+  },
+  {
+    path: '/resume',
+    key: 'resume',
+    title: 'Resume | Ansh, Full Stack, AI & DevOps Engineer',
+    description:
+      'Resume of Ansh: 4+ years of experience in system architecture, Python backends (Django, FastAPI), React, Flutter, AI and cloud DevOps. Skills, experience and selected projects.',
   },
   ...SERVICE_PAGES.map((page) => ({
     path: `/services/${page.slug}`,
@@ -64,21 +71,21 @@ export const ROUTES = [
   {
     path: '/privacy',
     key: 'privacy',
-    title: 'Privacy Policy | NorthVaultStudios',
-    description: 'What NorthVault Studios collects through this website, how it is used and how to ask us to change or delete it.',
+    title: 'Privacy Policy | Ansh',
+    description: 'What Ansh collects through this website, how it is used and how to ask for it to be changed or delete it.',
   },
   {
     path: '/terms',
     key: 'terms',
-    title: 'Terms of Use | NorthVaultStudios',
-    description: 'The terms for using the NorthVault Studios website.',
+    title: 'Terms of Use | Ansh',
+    description: 'The terms for using the Ansh website.',
   },
 ]
 
 export const NOT_FOUND_ROUTE = {
   path: null,
   key: 'not-found',
-  title: 'Page Not Found | NorthVaultStudios',
+  title: 'Page Not Found | Ansh',
   description: 'The page you were looking for could not be found.',
   noindex: true,
 }

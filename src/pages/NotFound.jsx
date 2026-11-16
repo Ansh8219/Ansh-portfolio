@@ -20,7 +20,7 @@ const NotFound = () => (
             Back to Home
           </Link>
           <Link to="/services" className="hero-story-btn">
-            Our Services
+            My Expertise
           </Link>
           <Link to="/contact" className="hero-story-btn">
             Contact

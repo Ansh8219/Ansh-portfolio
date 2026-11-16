@@ -10,11 +10,11 @@ import { ZOOM_SCROLL } from '../../motion/handoff'
 // Display word per discipline (the full approved name stays in the <h3>).
 const WORD = {
   ai: 'AI',
-  software: 'Software',
-  web: 'Web & Mobile',
-  cloud: 'Cloud',
-  data: 'Data & QA',
-  brand: 'Brand',
+  software: 'Architecture',
+  web: 'Frontend & Mobile',
+  cloud: 'Cloud & DevOps',
+  data: 'Python Backend',
+  brand: 'Full Stack',
 }
 
 const TV_SRC = '/images/nv/763116e303e94da529ca1429a0cb603b4c2a0234-1536x1024.avif'
@@ -168,9 +168,9 @@ function ServicesAtlas() {
     <section id="services" ref={rootRef} className="at-section at-services" aria-labelledby="services-title">
       <div className="at-svc" data-stage>
         <div className="at-svc__top at-wrap" data-chrome>
-          <SectionLabel>Approach</SectionLabel>
+          <SectionLabel>Expertise</SectionLabel>
           <h2 id="services-title" className="at-svc__title">
-            Six disciplines, one team
+            What I do
           </h2>
           <ol className="at-svc__index" aria-label="Disciplines">
             {SERVICES.map((service, index) => (

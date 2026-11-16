@@ -7,8 +7,8 @@ function BrandLogo({ compact = false, onDark = false, className = '' }) {
         onDark ? 'text-white' : 'text-[var(--text-primary)]'
       } ${className}`}
     >
-      <span className="brand-logo__mark text-[#ff6b00]">NorthVault</span>
-      <span className="brand-logo__word">Studios</span>
+      <span className="brand-logo__mark text-[#ff6b00]">Ansh</span>
+      <span className="brand-logo__word">.dev</span>
     </span>
   )
 }

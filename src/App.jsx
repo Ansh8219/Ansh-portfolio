@@ -20,6 +20,7 @@ import Work from './pages/Work'
 import ServiceDetail from './pages/ServiceDetail'
 import Legal from './pages/Legal'
 import Contact from './pages/Contact'
+import Resume from './pages/Resume'
 import NotFound from './pages/NotFound'
 import { scrollToSection } from './utils/scrollToSection'
 import { getLenisInstance } from './utils/lenis'
@@ -108,6 +109,7 @@ function App() {
               <Route path="/services/:slug" element={<ServiceDetail />} />
               <Route path="/privacy" element={<Legal doc="privacy" />} />
               <Route path="/terms" element={<Legal doc="terms" />} />
+              <Route path="/resume" element={<Resume />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

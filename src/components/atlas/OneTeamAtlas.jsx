@@ -8,11 +8,11 @@ import { gsap, SplitText } from '../../motion/signal'
 // Display word per discipline (approved service names, shortened).
 const WORDS = {
   ai: 'AI',
-  software: 'Software',
-  web: 'Web & Mobile',
-  cloud: 'Cloud',
-  data: 'Data & QA',
-  brand: 'Brand',
+  software: 'Architecture',
+  web: 'React & Flutter',
+  cloud: 'DevOps',
+  data: 'Python',
+  brand: 'Full Stack',
 }
 const ITEMS = SERVICES.map((s) => ({ key: s.key, word: WORDS[s.key] }))
 const pad = (n) => String(n).padStart(2, '0')
@@ -80,14 +80,14 @@ function OneTeamAtlas() {
     <section id="one-team" className="at-section at-invert at-one" aria-labelledby="one-title">
       <div className="at-wrap">
         <div className="at-one__bar">
-          <SectionLabel>One team</SectionLabel>
+          <SectionLabel>Skills</SectionLabel>
           <p className="at-one__count" aria-hidden="true">
             <span ref={countRef}>01</span> / {pad(ITEMS.length)}
           </p>
         </div>
 
         <h2 id="one-title" className="sr-only">
-          One team for AI, software, web and mobile, cloud, data and brand
+          One engineer for architecture, Python backend, web and mobile, AI and DevOps
         </h2>
         <p className={`at-one__word h-${ITEMS[0].key}`} aria-hidden="true">
           <span ref={wordRef}>{ITEMS[0].word}</span>
@@ -97,9 +97,9 @@ function OneTeamAtlas() {
         </p>
 
         <div className="at-one__foot">
-          <p className="at-one__sub">AI, software, web, cloud, data and brand, designed and built under one roof.</p>
+          <p className="at-one__sub">Architecture, backend, web, mobile, AI and cloud, from one engineer.</p>
           <Link to="/services" className="at-arrow-link at-one__link">
-            Explore all services
+            Explore my expertise
             <ArrowUpRight aria-hidden="true" size={18} />
           </Link>
         </div>

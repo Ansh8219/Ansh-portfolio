@@ -3,74 +3,72 @@
  * The home page links to `/services#<key>`, so each key is also the section id on the page.
  */
 export const SERVICES_INTRO =
-  'AI, engineering and creative work from one team, from the first idea to the support that follows. Pick a discipline to jump straight to it.'
+  '4+ years of building and running production software: architecture, Python backends, web and mobile apps, AI systems and the cloud infrastructure underneath. Pick an area to jump straight to it.'
 
 export const SERVICE_DETAILS = {
   ai: {
     lead:
-      'Agents, RAG, voice and generative AI on commercial or open-weight models, so repetitive work shrinks and your product gets smarter.',
+      'AI agents, LLM integrations and RAG systems that do real work inside a product, so repetitive tasks shrink and the product gets smarter.',
     features: [
-      'AI Agents, Assistants & Multi-Agent Systems',
-      'Generative AI & LLM Integrations',
+      'AI Agents & Assistants',
+      'LLM & Generative AI Integrations',
       'RAG & Knowledge Systems',
       'Voice & Multimodal AI',
-      'AI Workflow & Process Automation',
-      'AI Document Intelligence',
-      'ML Integration & Model Orchestration',
-      'AI Coding Assistants & Dev Workflows',
+      'AI Workflow Automation',
+      'Document Intelligence',
+      'Model Orchestration',
     ],
   },
   software: {
     lead:
-      'Custom software and complete products, from discovery to launch and ongoing support, built around how your business actually works.',
+      'The part that decides whether a product survives growth: service boundaries, data models, queues, caching and failure handling, designed before the first line of code.',
     features: [
-      'Custom Software',
-      'MVPs & Product Builds',
-      'Admin Platforms & Dashboards',
-      'Business Process Automation',
-      'C# / .NET Systems',
-      'Technology Consulting',
-      'Ongoing Engineering Support',
+      'System & Software Architecture',
+      'Microservices & Modular Monoliths',
+      'Database & Data-Model Design',
+      'Scalability & Performance Planning',
+      'Technical Design Documents',
+      'Code Review & Tech Consulting',
     ],
   },
   web: {
     lead:
-      'Fast, responsive web platforms and iOS and Android apps, with UI/UX design built in, so people enjoy using what you ship.',
-    features: ['Web Platforms', 'React & Next.js', 'Flutter & React Native', 'iOS & Android', 'UI/UX Design', 'SEO & Performance'],
+      'Fast, responsive React web apps and Flutter apps for iOS and Android, wired to the backend I build.',
+    features: ['React Web Apps', 'Admin Panels & Dashboards', 'Flutter (iOS & Android)', 'App Store & Play Store Releases', 'API Integration', 'Performance Tuning'],
   },
   cloud: {
     lead:
-      'Secure APIs, integrations and cloud infrastructure on AWS or Azure that keep your product fast, reliable and ready to scale as usage grows.',
+      'Cloud infrastructure and delivery pipelines: containers, automated deployments, monitoring and the security basics, so releases are boring and uptime is not.',
     features: [
-      'APIs & Integrations',
-      'Python, Node.js & .NET Backends',
-      'Microservices',
-      'AWS & Azure',
-      'Docker, Kubernetes & Linux',
-      'CI/CD & DevOps',
+      'AWS Infrastructure',
+      'Docker & Kubernetes',
+      'CI/CD Pipelines',
+      'Linux Server Management',
+      'Monitoring & Logging',
+      'Cost & Security Hygiene',
     ],
   },
   data: {
-    lead: 'Reliable data, analytics and testing, so your decisions and releases rest on information you can trust.',
+    lead:
+      'My main craft: Python backends in Django and FastAPI, with PostgreSQL, Redis and Celery, built to be clean, tested and easy to extend.',
     features: [
-      'Data Engineering',
+      'Django & Django REST Framework',
+      'FastAPI & Async Python',
       'PostgreSQL, MySQL & MongoDB',
-      'Analytics & Reporting',
-      'Test Automation',
-      'Browser Automation',
-      'Quality Assurance',
+      'Redis & Celery Background Jobs',
+      'Third-party API Integrations',
+      'Authentication & Role-based Access',
     ],
   },
   brand: {
     lead:
-      'Brand identity, digital marketing and social media management from our creative team, so the product we engineer is easy to find, trust and remember.',
+      'Whole products from idea to release: backend, admin panel, mobile app and deployment handled by one engineer, which keeps decisions fast and hand-offs few.',
     features: [
-      'Brand Identity',
-      'Logo Design',
-      'Digital Marketing',
-      'Social Media Management',
-      'Content Creation',
-      'Campaign Management',
+      'MVPs & Product Builds',
+      'Admin Platforms',
+      'Backend + Web + Mobile Delivery',
+      'Business Process Automation',
+      'Launch & Ongoing Support',
     ],
   },
 }

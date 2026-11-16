@@ -120,7 +120,7 @@ export function buildHeadHtml(meta, siteUrl) {
       `<meta property="og:image" content="${escapeHtml(image)}" />`,
       `<meta property="og:image:width" content="1200" />`,
       `<meta property="og:image:height" content="630" />`,
-      `<meta property="og:image:alt" content="NorthVault Studios vault unit, a white safe-like device with an orange glow" />`,
+      `<meta property="og:image:alt" content="Ansh portfolio, an AI unit illustration with an orange glow" />`,
       `<meta name="twitter:image" content="${escapeHtml(image)}" />`,
     )
   }

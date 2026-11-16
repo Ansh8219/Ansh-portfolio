@@ -20,14 +20,14 @@ const HIDE_AFTER = 160 // px scrolled before the bar is allowed to slide away
 /** Home page sections, in order, with the marker shown in the bar while each is in view. */
 const HOME_SECTIONS = [
   { id: 'hero', label: 'Intro' },
-  { id: 'who-we-are', label: 'Studio' },
+  { id: 'who-we-are', label: 'About' },
   { id: 'services', label: 'Approach' },
   { id: 'work', label: 'Work' },
-  { id: 'one-team', label: 'One team' },
+  { id: 'one-team', label: 'Skills' },
   { id: 'contact', label: 'Contact' },
 ]
 const HOME_IDS = HOME_SECTIONS.map((s) => s.id)
-const PAGE_LABELS = { '/work': 'Work', '/about': 'About', '/approach': 'Approach', '/services': 'Services', '/contact': 'Contact', '/privacy': 'Privacy', '/terms': 'Terms' }
+const PAGE_LABELS = { '/work': 'Work', '/about': 'About', '/approach': 'Approach', '/services': 'Services', '/contact': 'Contact', '/resume': 'Resume', '/privacy': 'Privacy', '/terms': 'Terms' }
 
 // Menu artwork per link: one of the vault's three states (our own procedural visual).
 const MENU_VARIANT = { services: 'services', work: 'hero', 'who-we-are': 'hero', contact: 'door' }
@@ -163,7 +163,7 @@ const Navbar = memo(() => {
     <header ref={headerRef} className={`at-nav${isScrolled ? ' is-scrolled' : ''}${isHidden && !isMenuOpen ? ' is-hidden' : ''}${isMenuOpen ? ' is-open' : ''}`}>
       <div className="at-nav__bar">
         <div className="at-nav__left">
-          <Link to="/" onClick={(event) => handleNavClick(event, 'hero')} className="at-nav__logo" aria-label="NorthVault Studios home">
+          <Link to="/" onClick={(event) => handleNavClick(event, 'hero')} className="at-nav__logo" aria-label="Ansh home">
             <BrandLogo />
           </Link>
           <p className="at-nav__marker" aria-hidden="true">
@@ -235,8 +235,8 @@ const Navbar = memo(() => {
           </div>
 
           <div className="at-menu__foot">
-            <a href={MAILTO}>hello@northvaultstudios.com</a>
-            <span>Chandigarh, India</span>
+            <a href={MAILTO}>ansh.dev721@gmail.com</a>
+            <span>Chandigarh / Mohali, India</span>
             <span className="at-menu__social">
               {SOCIAL_LINKS.map(({ name, url }) => (
                 <a key={name} href={url} target="_blank" rel="noopener noreferrer">

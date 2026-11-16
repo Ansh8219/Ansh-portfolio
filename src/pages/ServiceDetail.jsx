@@ -14,7 +14,7 @@ const PROCESS = [
   { t: 'Listen', p: 'A conversation about what the product should do, who it is for and what a good result looks like.' },
   { t: 'Plan', p: 'A written plan with architecture, scope, timeline and cost, signed off by you.' },
   { t: 'Build', p: 'Focused sprints with regular demos, so you see progress and can steer it.' },
-  { t: 'Launch & support', p: 'We ship it, then stay on to fix, tune and extend it.' },
+  { t: 'Launch & support', p: 'I ship it, then stay on to fix, tune and extend it.' },
 ]
 
 const ServiceDetail = memo(() => {
@@ -58,7 +58,7 @@ const ServiceDetail = memo(() => {
         <div className="at-wrap">
           <SectionLabel>What&apos;s included</SectionLabel>
           <h2 id="sd-included" className="at-h2 sd-h2" data-fx="lines">
-            What we deliver.
+            What I deliver.
           </h2>
           <ul className="sd-included" data-fx="stagger">
             {page.included.map((item, i) => (
@@ -76,7 +76,7 @@ const ServiceDetail = memo(() => {
         <div className="at-wrap">
           <SectionLabel>How it runs</SectionLabel>
           <h2 id="sd-process" className="at-h2 sd-h2" data-fx="lines">
-            One team, start to finish.
+            One engineer, start to finish.
           </h2>
           <ol className="sd-process" data-fx="stagger">
             {PROCESS.map((step, i) => (
@@ -93,7 +93,7 @@ const ServiceDetail = memo(() => {
               <ArrowUpRight aria-hidden="true" size={16} />
             </Link>
             <Link to="/work" className="at-arrow-link">
-              See our work
+              See my work
               <ArrowUpRight aria-hidden="true" size={16} />
             </Link>
           </p>
@@ -149,7 +149,7 @@ const ServiceDetail = memo(() => {
       <section className="at-section at-ap-cta" aria-labelledby="sd-cta">
         <div className="at-wrap">
           <h2 id="sd-cta" className="at-ap-cta__title" data-fx="lines">
-            Tell us what you&apos;re building.
+            Tell me what you&apos;re building.
           </h2>
           <div className="at-ap-cta__row">
             <Link to="/contact" className="at-btn at-btn--arrow">
@@ -159,7 +159,7 @@ const ServiceDetail = memo(() => {
               </span>
             </Link>
             <a href={MAILTO} className="at-arrow-link">
-              hello@northvaultstudios.com
+              ansh.dev721@gmail.com
               <ArrowUpRight aria-hidden="true" size={16} />
             </a>
           </div>

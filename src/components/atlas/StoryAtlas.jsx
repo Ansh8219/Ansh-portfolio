@@ -5,9 +5,9 @@ import { WHO_WE_ARE_P1, WHO_WE_ARE_P2, ART } from '../../content/site'
 import { gsap, fillWords, useSignalMotion } from '../../motion/signal'
 
 const FACTS = [
-  { label: 'Based in', value: 'Chandigarh, India' },
-  { label: 'Replies', value: 'Within 24 hours' },
-  { label: 'Confidentiality', value: 'NDA on request' },
+  { label: 'Experience', value: '4+ years' },
+  { label: 'Focus', value: 'Architecture & Python backend' },
+  { label: 'Contact', value: 'ansh.dev721@gmail.com' },
 ]
 
 /**
@@ -41,11 +41,11 @@ function StoryAtlas() {
   return (
     <section id="who-we-are" ref={rootRef} className="at-section at-invert at-story" aria-labelledby="story-title">
       <div className="at-wrap at-story__grid">
-        <SectionLabel className="at-story__label">Studio</SectionLabel>
+        <SectionLabel className="at-story__label">About</SectionLabel>
 
         <div className="at-story__main">
           <h2 id="story-title" className="sr-only">
-            Who we are
+            About Ansh
           </h2>
           <p className="at-story__statement" data-fill>
             {WHO_WE_ARE_P1}
@@ -65,10 +65,10 @@ function StoryAtlas() {
 
           <div className="at-story__actions">
             <Link to="/about" className="at-btn at-btn--ghost">
-              About the studio
+              About me
             </Link>
             <Link to="/services" className="at-btn at-btn--ghost">
-              Our services
+              My expertise
             </Link>
           </div>
         </div>
@@ -79,7 +79,7 @@ function StoryAtlas() {
               src={ART.studio.image}
               srcSet={`${ART.studio.imageSm} 720w, ${ART.studio.image} ${ART.studio.width}w`}
               sizes="(min-width: 1024px) 30vw, 100vw"
-              alt="A NorthVault Studios desk: laptop with code, wireframe sketches and a desk lamp"
+              alt="A developer desk: laptop with code, wireframe sketches and a desk lamp"
               width={ART.studio.width}
               height={ART.studio.height}
               loading="lazy"
@@ -88,7 +88,7 @@ function StoryAtlas() {
               data-video
             />
           </div>
-          <figcaption className="at-caption">Fig. 02 · The studio</figcaption>
+          <figcaption className="at-caption">Fig. 02 · The workspace</figcaption>
         </figure>
       </div>
     </section>

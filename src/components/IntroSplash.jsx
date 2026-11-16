@@ -2,7 +2,7 @@ import { memo, useRef } from 'react'
 import { gsap, useIsoLayoutEffect } from '../motion/signal'
 
 /**
- * First-load intro: the classic name (orange "NV" from the left, white "Studios.." from the top) sits bottom-left
+ * First-load intro: the classic name (orange "Ansh" from the left, white ".dev" from the top) sits bottom-left
  * while a counter runs to 100, an orange seam lights up across the middle, then the screen splits open along a horizontal line (top half up, bottom half down) like vault shutters and the page is revealed behind it.
  * Client-only (App mounts it after hydration). Click anywhere to speed it up. ~2.7s in total; the hero starts
  * building in as the doors begin to open (see INTRO_MS in utils/intro.js).
@@ -76,18 +76,18 @@ function IntroSplash({ onComplete }) {
       <div className="nv-intro__content" data-content>
         <p className="nv-intro__corner nv-intro__corner--tl" data-fade>
           <span className="nv-intro__dot" />
-          NorthVault Studios
+          Ansh · Portfolio
         </p>
         <p className="nv-intro__corner nv-intro__corner--tr" data-fade>
-          Chandigarh · India
+          Full Stack · AI · DevOps
         </p>
 
         <h1 className="nv-intro__name" data-name aria-hidden="true">
           <span className="nv-intro__nv" data-nv>
-            NV
+            Ansh
           </span>
           <span className="nv-intro__st" data-st>
-            Studios..
+            .dev
           </span>
         </h1>
 
