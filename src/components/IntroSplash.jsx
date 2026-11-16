@@ -1,183 +1,108 @@
-import { useEffect, useState, memo, useRef } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
-import { useTheme } from '../context/ThemeContext'
-import { CINEMATIC_EASE } from '../motion/cinematic'
+import { memo, useRef } from 'react'
+import { gsap, useIsoLayoutEffect } from '../motion/signal'
 
-const SPLASH_MS = 1500
-const EXIT_DURATION = 0.32
-
-const brandWordStyle = {
-  fontSize: 'clamp(4.25rem, 20vw, 14rem)',
-  fontWeight: 900,
-  letterSpacing: '-0.04em',
-  lineHeight: 1,
-  minHeight: 'clamp(4.5rem, 22vw, 15rem)',
-}
-
-const accentGradient = {
-  background: 'linear-gradient(135deg, #ff6b00, #ff8533)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
-}
-
-/** Animate wrapper only — gradient text breaks if transform is on the text node itself */
-const nvFromLeft = {
-  hidden: { opacity: 0, x: -120 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.55, ease: CINEMATIC_EASE },
-  },
-}
-
-const studiosFromTop = {
-  hidden: { opacity: 0, y: -72 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: CINEMATIC_EASE, delay: 0.08 },
-  },
-}
-
+/**
+ * First-load intro: the classic name (orange "NV" from the left, white "Studios.." from the top) sits bottom-left
+ * while a counter runs to 100, an orange seam lights up across the middle, then the screen splits open along a horizontal line (top half up, bottom half down) like vault shutters and the page is revealed behind it.
+ * Client-only (App mounts it after hydration). Click anywhere to speed it up. ~2.7s in total; the hero starts
+ * building in as the doors begin to open (see INTRO_MS in utils/intro.js).
+ */
 function IntroSplash({ onComplete }) {
-  const { theme } = useTheme()
-  const isLight = theme === 'light'
-  const prefersReducedMotion = useReducedMotion()
-  const [visible, setVisible] = useState(true)
-  const [progress, setProgress] = useState(0)
-  const startRef = useRef(performance.now())
+  const rootRef = useRef(null)
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
+    const root = rootRef.current
+    if (!root) return undefined
+    const q = gsap.utils.selector(root)
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+
+    const counter = { v: 0 }
+    const countEl = q('[data-count]')[0]
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        defaults: { ease: 'expo.out' },
+        onComplete: () => onComplete?.(),
+      })
+
+      gsap.set(q('[data-fade]'), { autoAlpha: 0, y: 12 })
+      gsap.set(q('[data-bar]'), { scaleX: 0 })
+      gsap.set(q('[data-seam]'), { scaleX: 0, autoAlpha: 1 })
+      gsap.set(q('[data-nv]'), { autoAlpha: 0, x: -120 })
+      gsap.set(q('[data-st]'), { autoAlpha: 0, y: -72 })
+
+      tl.to(q('[data-nv]'), { autoAlpha: 1, x: 0, duration: 0.85 }, 0.15)
+        .to(q('[data-st]'), { autoAlpha: 1, y: 0, duration: 0.85 }, 0.25)
+        .to(q('[data-fade]'), { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out' }, 0.3)
+        .to(counter, {
+          v: 100,
+          duration: 1.55,
+          ease: 'power2.inOut',
+          onUpdate: () => {
+            if (countEl) countEl.textContent = String(Math.round(counter.v))
+          },
+        }, 0.2)
+        .to(q('[data-bar]'), { scaleX: 1, duration: 1.55, ease: 'power2.inOut' }, 0.2)
+        // the seam lights up across the middle: the vault is about to open
+        .to(q('[data-seam]'), { scaleX: 1, duration: 0.5, ease: 'power3.inOut' }, 1.5)
+        // name and chrome leave first, then the halves part
+        .to(q('[data-name]'), { yPercent: 18, duration: 0.6, ease: 'power2.in' }, 1.9)
+        .to(q('[data-content]'), { autoAlpha: 0, duration: 0.35, ease: 'power1.in' }, 1.95)
+        .addLabel('open', 1.95)
+        .to(q('[data-door="t"]'), { yPercent: -101, duration: 0.95, ease: 'expo.inOut' }, 'open')
+        .to(q('[data-door="b"]'), { yPercent: 101, duration: 0.95, ease: 'expo.inOut' }, 'open')
+        .to(q('[data-seam]'), { autoAlpha: 0, duration: 0.4 }, 'open+=0.35')
+
+      const speedUp = () => tl.timeScale(4)
+      root.addEventListener('click', speedUp)
+      root.addEventListener('touchstart', speedUp, { passive: true })
+    }, root)
+
     return () => {
+      ctx.revert()
       document.body.style.overflow = prevOverflow
     }
+    // runs once per mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    const duration = prefersReducedMotion ? 400 : SPLASH_MS
-    startRef.current = performance.now()
-    let rafId = 0
-
-    const tick = () => {
-      const elapsed = performance.now() - startRef.current
-      const remaining = Math.max(0, duration - elapsed)
-      if (remaining > 0) {
-        setProgress(elapsed / duration)
-        rafId = requestAnimationFrame(tick)
-      } else {
-        setProgress(1)
-      }
-    }
-    rafId = requestAnimationFrame(tick)
-
-    const done = setTimeout(() => setVisible(false), duration)
-    return () => {
-      cancelAnimationFrame(rafId)
-      clearTimeout(done)
-    }
-  }, [prefersReducedMotion])
-
-  const percent = Math.round(progress * 100)
-  const studiosColor = isLight ? '#0a0a0a' : '#ffffff'
-  const mutedText = isLight ? 'rgba(10, 10, 10, 0.45)' : 'rgba(255, 255, 255, 0.4)'
-  const percentMuted = isLight ? 'rgba(10, 10, 10, 0.55)' : 'rgba(255, 255, 255, 0.7)'
-  const trackBg = isLight ? 'rgba(10, 10, 10, 0.1)' : 'rgba(255, 255, 255, 0.1)'
-
   return (
-    <AnimatePresence onExitComplete={onComplete}>
-      {visible && (
-        <motion.div
-          key="intro-splash"
-          className={`intro-splash fixed inset-0 z-[200] flex flex-col ${
-            isLight ? 'intro-splash--light bg-white' : 'intro-splash--dark bg-black'
-          }`}
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: prefersReducedMotion ? 0.2 : EXIT_DURATION, ease: CINEMATIC_EASE }}
-          role="presentation"
-          aria-hidden
-        >
-          <div className="relative z-[1] flex flex-1 items-center justify-center overflow-visible">
-            {!prefersReducedMotion ? (
-              <div className="section-pad site-shell flex w-full flex-col items-center justify-center overflow-visible px-3 text-center sm:px-4">
-                <div
-                  className="intro-splash__logo flex w-full max-w-[min(100%,52rem)] items-baseline justify-center gap-0 overflow-visible px-2 select-none"
-                  style={brandWordStyle}
-                >
-                  <motion.div
-                    className="inline-flex shrink-0 will-change-transform"
-                    variants={nvFromLeft}
-                    initial="hidden"
-                    animate="visible"
-                  >
-                    <span className="font-black" style={accentGradient}>
-                      NV
-                    </span>
-                  </motion.div>
-                  <motion.div
-                    className="inline-flex shrink-0 will-change-transform"
-                    variants={studiosFromTop}
-                    initial="hidden"
-                    animate="visible"
-                  >
-                    <span className="font-black" style={{ color: studiosColor }}>
-                      Studios..
-                    </span>
-                  </motion.div>
-                </div>
-                <motion.p
-                  className="mt-3 text-[10px] uppercase tracking-[0.4em] md:mt-4 md:text-xs"
-                  style={{ color: mutedText }}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.45, duration: 0.35, ease: CINEMATIC_EASE }}
-                >
-                  NorthVaultStudios
-                </motion.p>
-              </div>
-            ) : (
-              <span
-                className="intro-splash__logo select-none font-black"
-                style={{ ...brandWordStyle, ...accentGradient }}
-              >
-                NVStudios..
-              </span>
-            )}
-          </div>
+    <div ref={rootRef} className="nv-intro" role="presentation" aria-hidden="true">
+      <div className="nv-intro__door nv-intro__door--t" data-door="t" />
+      <div className="nv-intro__door nv-intro__door--b" data-door="b" />
+      <span className="nv-intro__seam" data-seam />
 
-          <div className="section-pad w-full pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-            <p className="intro-splash__loading-label mb-2 text-center text-[10px] font-bold uppercase tracking-[0.55em] text-[#ff6b00] md:text-xs">
-              Loading
-            </p>
-            <p
-              className={`intro-splash__percent text-center font-black tabular-nums leading-none ${
-                isLight ? 'intro-splash__percent--light text-[#0a0a0a]' : 'text-white'
-              }`}
-              aria-live="polite"
-              aria-label={`Loading ${percent} percent`}
-            >
-              {percent}
-              <span className="text-[0.45em] font-bold" style={{ color: percentMuted }}>
-                %
-              </span>
-            </p>
-            <div
-              className="mx-auto mt-4 h-[3px] max-w-md overflow-hidden rounded-full"
-              style={{ backgroundColor: trackBg }}
-            >
-              <motion.div
-                className="h-full origin-left rounded-full bg-gradient-to-r from-[#ff6b00] to-[#ff8533]"
-                style={{ width: `${progress * 100}%` }}
-                transition={{ duration: 0.05, ease: 'linear' }}
-              />
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      <div className="nv-intro__content" data-content>
+        <p className="nv-intro__corner nv-intro__corner--tl" data-fade>
+          <span className="nv-intro__dot" />
+          NorthVault Studios
+        </p>
+        <p className="nv-intro__corner nv-intro__corner--tr" data-fade>
+          Chandigarh · India
+        </p>
+
+        <h1 className="nv-intro__name" data-name aria-hidden="true">
+          <span className="nv-intro__nv" data-nv>
+            NV
+          </span>
+          <span className="nv-intro__st" data-st>
+            Studios..
+          </span>
+        </h1>
+
+        <div className="nv-intro__load" data-fade>
+          <p className="nv-intro__label">Loading</p>
+          <p className="nv-intro__count">
+            <b data-count>0</b>
+            <span>%</span>
+          </p>
+        </div>
+        <span className="nv-intro__bar">
+          <i data-bar />
+        </span>
+      </div>
+    </div>
   )
 }
 

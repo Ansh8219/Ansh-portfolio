@@ -1,252 +1,303 @@
-import { useState, useCallback, memo } from 'react'
-import { motion } from 'framer-motion'
-import { HiOutlineEnvelope, HiOutlinePhone, HiOutlineMapPin, HiOutlineMap } from 'react-icons/hi2'
-import BrandedEmail, { MAILTO } from '../components/BrandedEmail'
-import HandwriteAccent from '../components/HandwriteAccent'
-import GsapReveal from '../components/GsapReveal'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { ArrowUpRight } from 'lucide-react'
+import SectionLabel from '../components/atlas/SectionLabel'
+import PageFx from '../components/PageFx'
+import { MAILTO } from '../components/BrandedEmail'
+import { useContactForm } from '../hooks/useContactForm'
+import { gsap, SplitText } from '../motion/signal'
 
-const Contact = memo(() => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  })
+const EMAIL = 'hello@northvaultstudios.com'
+const GREETINGS = ['Hello.', "Let's talk.", 'Say hi.', 'Start here.']
 
-  const handleChange = useCallback((e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }))
+const NEEDS = ['AI & automation', 'Software & product', 'Web & mobile', 'Cloud & backend', 'Data & QA', 'Brand & growth', 'Not sure yet']
+const PURPOSES = ['New product', 'Redesign or upgrade', 'Automate a process', 'Something else']
+const TIMINGS = ['As soon as possible', 'Coming months', 'Still exploring']
+
+// How each answer reads inside the sentence "You're looking for … for …, timing: …."
+const PHRASE = {
+  'AI & automation': 'AI & automation',
+  'Software & product': 'software & product engineering',
+  'Web & mobile': 'web & mobile development',
+  'Cloud & backend': 'cloud & backend',
+  'Data & QA': 'data & QA',
+  'Brand & growth': 'brand & growth',
+  'Not sure yet': 'some help deciding',
+  'New product': 'a new product',
+  'Redesign or upgrade': 'a redesign or upgrade',
+  'Automate a process': 'automating a process',
+  'Something else': 'something else',
+  'As soon as possible': 'as soon as possible',
+  'Coming months': 'the coming months',
+  'Still exploring': 'still exploring',
+}
+
+/** The hero word: starts as "Hello." (what the server renders) and cycles through a few plain-English openers. */
+function GreetingWord() {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    let index = 0
+    let tl = null
+    let split = null
+    const make = () => SplitText.create(el, { type: 'chars', charsClass: 'at-cx-char' })
+
+    const swap = () => {
+      const next = (index + 1) % GREETINGS.length
+      tl?.kill()
+      split?.revert()
+      split = make()
+      tl = gsap.timeline()
+      tl.to(split.chars, { yPercent: -110, duration: 0.28, ease: 'power3.in', stagger: 0.012 }).add(() => {
+        split.revert()
+        index = next
+        el.textContent = GREETINGS[index]
+        split = make()
+        gsap.fromTo(
+          split.chars,
+          { yPercent: 110 },
+          { yPercent: 0, duration: 0.6, ease: 'expo.out', stagger: 0.02, onComplete: () => split?.revert() },
+        )
+      })
+    }
+
+    const timer = window.setInterval(swap, 2400)
+    return () => {
+      window.clearInterval(timer)
+      tl?.kill()
+      split?.revert()
+    }
   }, [])
 
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault()
-      // Handle form submission here
-      // TODO: Replace with actual form submission API call
-      alert('Thank you for your message! We will get back to you soon.')
-      setFormData({ name: '', email: '', message: '' })
-    },
-    [formData],
+  return (
+    <p className="at-cx-hero__word" aria-hidden="true">
+      <span ref={ref}>{GREETINGS[0]}</span>
+    </p>
   )
+}
 
-  const contactInfo = [
-    {
-      icon: HiOutlineEnvelope,
-      title: 'Email',
-      content: <BrandedEmail />,
-      link: MAILTO,
-    },
-    {
-      icon: HiOutlinePhone,
-      title: 'Phone',
-      content: '+91 8219268903',
-      link: 'tel:+918219268903',
-    },
-    {
-      icon: HiOutlineMapPin,
-      title: 'Location',
-      content: 'Chandigarh, India',
-      link: null,
-    },
-  ]
+/** Live Chandigarh time with seconds. Placeholders on the server / first render (no hydration mismatch). */
+function StudioClock() {
+  const [t, setT] = useState(null)
+
+  useEffect(() => {
+    let format
+    try {
+      format = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23', timeZone: 'Asia/Kolkata' })
+    } catch {
+      return undefined
+    }
+    const tick = () => {
+      const parts = format.formatToParts(new Date())
+      const get = (type) => parts.find((p) => p.type === type)?.value
+      setT({ h: get('hour'), m: get('minute'), s: get('second') })
+    }
+    tick()
+    const id = window.setInterval(tick, 1000)
+    return () => window.clearInterval(id)
+  }, [])
 
   return (
-    <div className="relative z-10 page-hero-pad pb-12 sm:pb-20">
-      {/* Hero Section */}
-      <section className="section-pad py-12 sm:py-20">
-        <GsapReveal className="site-shell text-center" stagger={0.1} y={28} start="top 90%">
-          <HandwriteAccent as="h1" size="title" className="mb-2" masked>
-            Get In Touch
-          </HandwriteAccent>
-          <HandwriteAccent tone="soft" className="mb-6" masked>
-            Say Hello → Start Building
-          </HandwriteAccent>
-          <p className="editorial-body mx-auto max-w-3xl text-base sm:text-xl" data-reveal>
-            Let's discuss how we can bring your digital vision to life
-          </p>
-        </GsapReveal>
-      </section>
-
-      {/* Contact Section */}
-      <section className="section-pad py-10">
-        <div className="site-shell">
-          <GsapReveal className="grid grid-cols-1 gap-12 lg:grid-cols-2" stagger={0.14} y={32}>
-            {/* Contact Form */}
-            <div className="glass-strong rounded-2xl p-5 sm:p-8 md:p-12" data-reveal>
-              <HandwriteAccent as="h2" size="title" align="left" className="mb-2">
-                Send Us a Message
-              </HandwriteAccent>
-              <HandwriteAccent align="left" tone="soft" className="mb-6">
-                We're Listening
-              </HandwriteAccent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="mb-2 block text-sm font-semibold text-primary">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="form-input-mobile glass light:border-black/10 w-full rounded-lg border border-white/10 px-4 py-3 text-primary placeholder-secondary transition-all focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 dark:border-white/10"
-                    placeholder="Your Name"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-semibold text-primary">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="form-input-mobile glass light:border-black/10 w-full rounded-lg border border-white/10 px-4 py-3 text-primary placeholder-secondary transition-all focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 dark:border-white/10"
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="mb-2 block text-sm font-semibold text-primary">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows="6"
-                    className="form-input-mobile glass light:border-black/10 w-full resize-none rounded-lg border border-white/10 px-4 py-3 text-primary placeholder-secondary transition-all focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 dark:border-white/10"
-                    placeholder="Tell us about your project..."
-                  ></textarea>
-                </div>
-
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full rounded-lg px-8 py-4 font-semibold transition-all hover:shadow-2xl"
-                  style={{
-                    backgroundColor: 'var(--text-accent)',
-                    color: 'var(--bg-primary)',
-                  }}
-                >
-                  <span style={{ color: 'var(--bg-primary)' }}>Send Message</span>
-                </motion.button>
-              </form>
-            </div>
-
-            {/* Contact Info */}
-            <div className="space-y-6" data-reveal>
-              <div className="glass-strong rounded-2xl p-5 sm:p-8 md:p-12">
-                <HandwriteAccent as="h2" size="title" align="left" className="mb-2">
-                  Contact Information
-                </HandwriteAccent>
-                <HandwriteAccent align="left" tone="soft" className="mb-6 sm:mb-8">
-                  Find Us Here
-                </HandwriteAccent>
-                <div className="space-y-6">
-                  {contactInfo.map((info) => {
-                    if (!info.link) {
-                      return (
-                        <div
-                          key={info.title}
-                          className="glass flex items-start space-x-4 rounded-xl p-6 opacity-75"
-                        >
-                          <div>
-                            <info.icon className="text-4xl text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="mb-1 text-lg font-semibold text-primary">{info.title}</h3>
-                            <p className="text-secondary">{info.content}</p>
-                          </div>
-                        </div>
-                      )
-                    }
-                    return (
-                      <motion.a
-                        key={info.title}
-                        href={info.link}
-                        whileHover={{ scale: 1.05, x: 10 }}
-                        className="glass glow-hover flex items-start space-x-4 rounded-xl p-6"
-                      >
-                        <div>
-                          <info.icon className="text-4xl text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="mb-1 text-lg font-semibold text-primary">{info.title}</h3>
-                          <p className="text-secondary">{info.content}</p>
-                        </div>
-                      </motion.a>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Map Placeholder */}
-              <div className="glass-strong rounded-2xl p-5 sm:p-8 md:p-12">
-                <h3 className="mb-4 text-xl font-bold gradient-text sm:text-2xl">Find Us</h3>
-                <div className="glass flex h-64 items-center justify-center rounded-xl p-8">
-                  <div className="text-center">
-                    <div className="mb-4 flex justify-center">
-                      <HiOutlineMap className="text-5xl text-primary" />
-                    </div>
-                    <p className="text-secondary">Google Maps Embed</p>
-                    <p className="mt-2 text-sm text-secondary">
-                      (Replace with actual Google Maps embed code)
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </GsapReveal>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="section-pad py-20">
-        <div className="site-shell">
-          <GsapReveal y={32} stagger={0.1}>
-            <div className="glass-strong rounded-2xl p-6 text-center sm:p-10 md:p-12">
-              <HandwriteAccent as="h2" size="title" className="mb-2" masked>
-                Ready to Start Your Project?
-              </HandwriteAccent>
-              <HandwriteAccent tone="soft" className="mb-6" masked>
-                One Email Away
-              </HandwriteAccent>
-              <p className="mb-8 text-base text-secondary sm:text-xl" data-reveal>
-                Let's collaborate and create something extraordinary together
-              </p>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-block"
-                data-reveal
-              >
-                <a
-                  href={MAILTO}
-                  className="inline-block rounded-lg px-8 py-4 font-semibold transition-all hover:shadow-2xl"
-                  style={{
-                    backgroundColor: 'var(--text-accent)',
-                    color: 'var(--bg-primary)',
-                  }}
-                >
-                  <span style={{ color: 'var(--bg-primary)' }}>Schedule a Consultation</span>
-                </a>
-              </motion.div>
-            </div>
-          </GsapReveal>
-        </div>
-      </section>
+    <div className="at-cx-clock">
+      <p className="at-cx-clock__label">Local time in Chandigarh</p>
+      <p className="at-cx-clock__time" aria-hidden="true">
+        <span>{t?.h ?? '--'}</span>
+        <span className="at-cx-clock__colon">:</span>
+        <span>{t?.m ?? '--'}</span>
+        <sup>{t?.s ?? '--'}</sup>
+      </p>
     </div>
+  )
+}
+
+function ChoiceGroup({ number, legend, name, options, value, onChange }) {
+  return (
+    <fieldset className="at-choice">
+      <legend>
+        <span className="at-q">{number}</span>
+        {legend}
+      </legend>
+      <div className="at-choice__opts">
+        {options.map((option) => (
+          <label key={option} className="at-opt">
+            <input type="radio" name={name} value={option} checked={value === option} onChange={onChange} />
+            <span>{option}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  )
+}
+
+/** A filled answer, or an empty solid blank (no dots, no ellipsis) until it is chosen. */
+const Blank = ({ value }) =>
+  value ? (
+    <span className="at-brief__fill">{PHRASE[value] ?? value}</span>
+  ) : (
+    <span className="at-brief__blank" aria-label="not chosen yet" />
+  )
+
+const Contact = memo(() => {
+  const { formData, formStatus, handleChange, handleSubmit } = useContactForm()
+  const [copied, setCopied] = useState(false)
+
+  const answered = [formData.service, formData.purpose, formData.timing, formData.name.trim(), formData.email.trim(), formData.message.trim()].filter(Boolean).length
+
+  const copyEmail = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 2200)
+    } catch {
+      window.location.href = MAILTO
+    }
+  }, [])
+
+  return (
+    <PageFx className="at-contact-page">
+      {/* Hero: greeting word, rule + studio line, live clock */}
+      <section className="at-cx-hero" aria-labelledby="contact-title">
+        <div className="at-wrap at-cx-hero__inner">
+          <SectionLabel>Contact</SectionLabel>
+          <h1 id="contact-title" className="sr-only">
+            Contact NorthVault Studios
+          </h1>
+          <GreetingWord />
+          <div className="at-cx-hero__base">
+            <div className="at-cx-hero__meta">
+              <span>Studio in Chandigarh</span>
+              <span>Digital engineering &amp; AI solutions, under one roof</span>
+            </div>
+            <StudioClock />
+          </div>
+        </div>
+      </section>
+
+      {/* Brief builder + details */}
+      <section className="at-section at-cx-body" aria-label="Start a project">
+        <div className="at-wrap at-contact__grid">
+          <form onSubmit={handleSubmit} className="at-form" data-fx="stagger">
+            <p className="at-progress" aria-live="polite">
+              <span>
+                <b>{answered}</b> of 6 answered
+              </span>
+              <span className="at-progress__bar" aria-hidden="true">
+                <i style={{ transform: `scaleX(${answered / 6})` }} />
+              </span>
+            </p>
+
+            <ChoiceGroup number="01" legend="What do you need?" name="service" options={NEEDS} value={formData.service} onChange={handleChange} />
+            <ChoiceGroup number="02" legend="What for?" name="purpose" options={PURPOSES} value={formData.purpose} onChange={handleChange} />
+            <ChoiceGroup number="03" legend="When?" name="timing" options={TIMINGS} value={formData.timing} onChange={handleChange} />
+
+            <div className="at-form__row">
+              <div className="at-field">
+                <label htmlFor="name">
+                  <span className="at-q">04</span>Name
+                </label>
+                <input id="name" name="name" type="text" value={formData.name} onChange={handleChange} required autoComplete="name" placeholder="Your name" />
+              </div>
+              <div className="at-field">
+                <label htmlFor="company">
+                  Company <span className="at-field__opt">(optional)</span>
+                </label>
+                <input id="company" name="company" type="text" value={formData.company} onChange={handleChange} autoComplete="organization" placeholder="Company or project" />
+              </div>
+            </div>
+
+            <div className="at-field">
+              <label htmlFor="email">
+                <span className="at-q">05</span>Email
+              </label>
+              <input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required autoComplete="email" inputMode="email" spellCheck={false} placeholder="you@company.com" />
+            </div>
+
+            <div className="at-field">
+              <label htmlFor="message">
+                <span className="at-q">06</span>What else should we know?
+              </label>
+              <textarea id="message" name="message" value={formData.message} onChange={handleChange} required rows={4} placeholder="Goals, current product, links, deadlines" />
+            </div>
+
+            <div className="at-brief">
+              <div className="at-brief__label">Your brief so far</div>
+              <p className="at-brief__text">
+                You&apos;re looking for <Blank value={formData.service} /> for <Blank value={formData.purpose} />, timing:{' '}
+                <Blank value={formData.timing} />.
+              </p>
+            </div>
+
+            <div>
+              <div className="at-form__submit">
+                <button type="submit" className="at-btn at-btn--arrow" disabled={formStatus === 'submitting'} aria-busy={formStatus === 'submitting' || undefined}>
+                  <span>{formStatus === 'submitting' ? 'Sending…' : 'Send my message'}</span>
+                  <span className="at-btn__cell" aria-hidden="true">
+                    <ArrowUpRight size={18} />
+                  </span>
+                </button>
+                <span className="at-form__hint">Lands straight in our inbox.</span>
+              </div>
+              <div role="status" aria-live="polite" aria-atomic="true">
+                {formStatus === 'success' ? (
+                  <p className="at-form__note">Message received — we&apos;ll be in touch within one business day.</p>
+                ) : null}
+                {formStatus === 'mailto' ? (
+                  <p className="at-form__note">
+                    Your email app should open with this message ready to send. If nothing opens, email <a href={MAILTO}>{EMAIL}</a> directly.
+                  </p>
+                ) : null}
+                {formStatus === 'error' ? (
+                  <p className="at-form__note at-form__note--error">
+                    Your message wasn&apos;t sent. Check your connection and try again, or email <a href={MAILTO}>{EMAIL}</a>.
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          </form>
+
+          <aside className="at-contact__intro at-cx-info" aria-label="Contact details">
+            <div className="at-cx-info__block">
+              <p className="at-cx-info__label">Email</p>
+              <a href={MAILTO} className="at-cx-info__email">
+                {EMAIL}
+              </a>
+              <div>
+                <button type="button" className="at-btn at-btn--ghost at-btn--sm" onClick={copyEmail}>
+                  {copied ? 'Copied' : 'Copy address'}
+                </button>
+                <span className="sr-only" role="status">
+                  {copied ? 'Email address copied' : ''}
+                </span>
+              </div>
+            </div>
+
+            <div className="at-cx-info__block">
+              <p className="at-cx-info__label">Studio</p>
+              <p className="at-cx-info__text">
+                NorthVault Studios
+                <br />
+                Digital Engineering &amp; AI Solutions Studio
+                <br />
+                Chandigarh, India
+              </p>
+            </div>
+
+            <div className="at-cx-info__block">
+              <p className="at-cx-info__label">Phone</p>
+              <a href="tel:+918219268903" className="at-cx-info__text at-cx-info__link">
+                +91&nbsp;8219268903
+              </a>
+            </div>
+
+            <div className="at-cx-info__block">
+              <p className="at-cx-info__label">Good to know</p>
+              <p className="at-cx-info__text">Reply within 24 hours · NDA on request</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </PageFx>
   )
 })
 

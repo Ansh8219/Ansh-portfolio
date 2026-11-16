@@ -1,76 +1,106 @@
-import { useState, useEffect, useCallback, memo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useCallback, useRef, memo } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { ArrowUpRight } from 'lucide-react'
 import ToggleTheme from './ToggleTheme'
 import BrandLogo from './BrandLogo'
-import { scrollToSection } from '../utils/scrollToSection'
+import VaultPoster from './atlas/VaultPoster'
+import { MAILTO } from './BrandedEmail'
+import { handleAnchorNavigation } from '../utils/scrollToSection'
 import { getLenisInstance } from '../utils/lenis'
-import { useTheme } from '../context/ThemeContext'
 import { useActiveSection } from '../hooks/useActiveSection'
-import { CINEMATIC_EASE, MOTION_DURATION } from '../motion/cinematic'
+import { NAV_LINKS, SOCIAL_LINKS } from '../content/site'
+import { useStudioTime } from '../hooks/useStudioTime'
 
-const NAV_LINKS = [
-  { label: 'Services', id: 'services' },
-  { label: 'Work', id: 'work' },
-  { label: 'About', id: 'who-we-are' },
-  { label: 'Contact', id: 'contact' },
+// `to` is the real route; `hash` deep-links to a home page section ("Work" has no page of its own).
+const linkTarget = (link) => (link.hash ? { pathname: link.to, hash: `#${link.hash}` } : link.to)
+
+const SCROLL_THRESHOLD = 24
+const HIDE_AFTER = 160 // px scrolled before the bar is allowed to slide away
+
+/** Home page sections, in order, with the marker shown in the bar while each is in view. */
+const HOME_SECTIONS = [
+  { id: 'hero', label: 'Intro' },
+  { id: 'who-we-are', label: 'Studio' },
+  { id: 'services', label: 'Approach' },
+  { id: 'work', label: 'Work' },
+  { id: 'one-team', label: 'One team' },
+  { id: 'contact', label: 'Contact' },
 ]
+const HOME_IDS = HOME_SECTIONS.map((s) => s.id)
+const PAGE_LABELS = { '/work': 'Work', '/about': 'About', '/approach': 'Approach', '/services': 'Services', '/contact': 'Contact', '/privacy': 'Privacy', '/terms': 'Terms' }
 
-const SCROLL_THRESHOLD = 28
+// Menu artwork per link: one of the vault's three states (our own procedural visual).
+const MENU_VARIANT = { services: 'services', work: 'hero', 'who-we-are': 'hero', contact: 'door' }
 
-const barTransition = { duration: 0.55, ease: CINEMATIC_EASE }
-
-const SECTION_IDS = ['hero', ...NAV_LINKS.map((l) => l.id)]
+const pad = (n) => String(n).padStart(2, '0')
 
 const Navbar = memo(() => {
-  const { theme } = useTheme()
-  const isLight = theme === 'light'
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
-  const activeId = useActiveSection(SECTION_IDS, 'hero')
+  const [isHidden, setIsHidden] = useState(false)
+  const lastYRef = useRef(0)
+  const headerRef = useRef(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [menuVariant, setMenuVariant] = useState('hero')
+  const { pathname } = useLocation()
+  const onHome = pathname === '/'
+  const activeId = useActiveSection(HOME_IDS, 'hero', pathname)
+  const time = useStudioTime()
+  const menuButtonRef = useRef(null)
+  const menuRef = useRef(null)
+  const progressRef = useRef(null)
 
+  const sectionIndex = onHome ? Math.max(0, HOME_IDS.indexOf(activeId)) : -1
+  const marker = onHome
+    ? { num: pad(sectionIndex), label: HOME_SECTIONS[sectionIndex].label }
+    : { num: '—', label: PAGE_LABELS[pathname.replace(/\/+$/, '') || '/'] ?? (pathname.startsWith('/services/') ? 'Services' : 'Page') }
+
+  const isLinkActive = (link) => (onHome ? activeId === link.id : !link.hash && link.to === pathname)
+
+  // scrolled state + page progress line (transform only, written directly to the element)
   useEffect(() => {
+    let rafId = 0
     const update = () => {
+      rafId = 0
       const lenis = getLenisInstance()
       const scrollY = lenis?.scroll ?? window.scrollY
       const next = scrollY > SCROLL_THRESHOLD
-      // Avoid redundant state updates during scroll.
       setIsScrolled((prev) => (prev === next ? prev : next))
+      // hide while scrolling down (past the first screenful), show on any upward scroll or near the top
+      const delta = scrollY - lastYRef.current
+      if (scrollY < HIDE_AFTER) setIsHidden(false)
+      else if (delta > 6) {
+        // A mouse click leaves focus on the clicked nav link/button (and SPA navigation keeps it
+        // there), which would exempt the bar from hiding via :focus-within. Only real keyboard focus
+        // (:focus-visible) should keep it open, so drop any other focus inside the bar.
+        const active = document.activeElement
+        if (active && active !== document.body && headerRef.current?.contains(active) && !active.matches(':focus-visible')) active.blur()
+        setIsHidden(true)
+      }
+      else if (delta < -6) setIsHidden(false)
+      if (Math.abs(delta) > 6 || scrollY < HIDE_AFTER) lastYRef.current = scrollY
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`
+    }
+    const schedule = () => {
+      if (!rafId) rafId = requestAnimationFrame(update)
     }
     update()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
     const lenis = getLenisInstance()
-    if (lenis) {
-      let rafId = 0
-      const onLenisScroll = () => {
-        if (rafId) return
-        rafId = requestAnimationFrame(() => {
-          rafId = 0
-          update()
-        })
-      }
-      lenis.on('scroll', onLenisScroll)
-      return () => {
-        if (rafId) cancelAnimationFrame(rafId)
-        lenis.off('scroll', onLenisScroll)
-      }
-    }
-    let rafId = 0
-    const onScroll = () => {
-      if (rafId) return
-      rafId = requestAnimationFrame(() => {
-        rafId = 0
-        update()
-      })
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
+    lenis?.on('scroll', schedule)
     return () => {
       if (rafId) cancelAnimationFrame(rafId)
-      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      lenis?.off('scroll', schedule)
     }
-  }, [])
+  }, [pathname])
 
+  // lock scroll while the menu is open
   useEffect(() => {
     const lenis = getLenisInstance()
-    if (isMobileOpen) {
+    if (isMenuOpen) {
       lenis?.stop()
       document.body.style.overflow = 'hidden'
     } else {
@@ -81,127 +111,143 @@ const Navbar = memo(() => {
       lenis?.start()
       document.body.style.overflow = ''
     }
-  }, [isMobileOpen])
+  }, [isMenuOpen])
 
-  const scrollTo = useCallback((id) => {
-    setIsMobileOpen(false)
-    scrollToSection(id, 80)
-  }, [])
+  // menu: focus the first link, Escape closes, Tab stays inside the dialog
+  useEffect(() => {
+    if (!isMenuOpen) return undefined
+    const menu = menuRef.current
+    menu?.querySelector('a')?.focus({ preventScroll: true })
 
-  const navLinkBase =
-    isScrolled || isLight
-      ? 'text-[var(--text-primary)] hover:text-[#ff6b00]'
-      : 'text-white/90 hover:text-[#ff6b00]'
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false)
+        menuButtonRef.current?.focus()
+        return
+      }
+      if (event.key !== 'Tab' || !menu) return
+      const focusable = [menuButtonRef.current, ...menu.querySelectorAll('a, button')].filter(Boolean)
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [isMenuOpen])
 
-  const navLinkClass = (id) =>
-    `${navLinkBase} transition-colors duration-200 focus-visible:text-[#ff6b00] ${
-      activeId === id ? 'text-[#ff6b00]' : ''
-    }`
+  useEffect(() => setIsMenuOpen(false), [pathname])
 
-  const logoOnDark = !isScrolled && !isLight
+  const toggleMenu = useCallback(() => setIsMenuOpen((open) => !open), [])
 
-  const themeToggleClass =
-    isScrolled || isLight
-      ? ''
-      : 'border-white/25 text-white hover:border-[#ff6b00] hover:text-[#ff6b00]'
+  // Plain clicks on a section of the current page use the smooth in-page scroller.
+  const handleNavClick = useCallback(
+    (event, sectionId) => {
+      if (sectionId && pathname === '/') {
+        if (handleAnchorNavigation(event, sectionId)) setIsMenuOpen(false)
+        return
+      }
+      if (!event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+        setIsMenuOpen(false)
+      }
+    },
+    [pathname],
+  )
 
   return (
-    <header className="site-header pointer-events-none fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top,0px)]">
-      <motion.div
-        className="pointer-events-auto mx-auto flex w-full max-w-[1600px] flex-col"
-        initial={false}
-        animate={{
-          maxWidth: isScrolled ? 720 : 1600,
-          marginTop: isScrolled ? 8 : 0,
-          paddingLeft: isScrolled ? 12 : 12,
-          paddingRight: isScrolled ? 12 : 12,
-        }}
-        transition={barTransition}
-        style={{ width: '100%' }}
-      >
-        <motion.div
-          className={`flex w-full items-center justify-between overflow-hidden ${isScrolled ? 'nav-bar-glass' : ''}`}
-          initial={false}
-          animate={{
-            borderRadius: isScrolled ? 9999 : 0,
-            backgroundColor: isScrolled ? 'var(--nav-bar-scrolled)' : 'transparent',
-            boxShadow: isScrolled ? 'var(--nav-bar-shadow)' : 'none',
-            paddingTop: isScrolled ? 12 : 20,
-            paddingBottom: isScrolled ? 12 : 20,
-            paddingLeft: isScrolled ? 24 : 0,
-            paddingRight: isScrolled ? 24 : 0,
-          }}
-          transition={barTransition}
-        >
-          <button
-            type="button"
-            onClick={() => scrollTo('hero')}
-            className="interactive-tap flex shrink-0 items-center focus:outline-none"
-            aria-label="NorthVaultStudios home"
-          >
-            <BrandLogo compact={isScrolled} onDark={logoOnDark} />
-          </button>
+    <header ref={headerRef} className={`at-nav${isScrolled ? ' is-scrolled' : ''}${isHidden && !isMenuOpen ? ' is-hidden' : ''}${isMenuOpen ? ' is-open' : ''}`}>
+      <div className="at-nav__bar">
+        <div className="at-nav__left">
+          <Link to="/" onClick={(event) => handleNavClick(event, 'hero')} className="at-nav__logo" aria-label="NorthVault Studios home">
+            <BrandLogo />
+          </Link>
+          <p className="at-nav__marker" aria-hidden="true">
+            <span className="at-nav__marker-num">{marker.num}</span>
+            <span>{marker.label}</span>
+            <span className="at-nav__progress">
+              <span ref={progressRef} />
+            </span>
+          </p>
+        </div>
 
-          <nav className="hidden md:flex items-center gap-8 lg:gap-10">
-            {NAV_LINKS.map((link) => (
-              <button
-                key={link.id}
-                type="button"
-                onClick={() => scrollTo(link.id)}
-                className={`nav-link text-xs uppercase tracking-[0.2em] ${navLinkClass(link.id)}`}
-                aria-current={activeId === link.id ? 'true' : undefined}
-              >
-                {link.label}
-              </button>
-            ))}
-            <ToggleTheme className={themeToggleClass} />
+        <div className="at-nav__tools">
+          <p className="at-nav__time" aria-hidden={!time || undefined}>
+            {time ? (
+              <>
+                Chandigarh <time>{time}</time>
+              </>
+            ) : null}
+          </p>
+          <ToggleTheme className="at-nav__theme" />
+          <Link to="/contact" onClick={(event) => handleNavClick(event)} className="at-btn at-btn--sm at-nav__cta">
+            Start a project
+          </Link>
+          <button
+            ref={menuButtonRef}
+            type="button"
+            onClick={toggleMenu}
+            className="at-nav__menu"
+            aria-expanded={isMenuOpen}
+            aria-controls="site-menu"
+          >
+            <span>{isMenuOpen ? 'Close' : 'Menu'}</span>
+            <span className={`at-nav__burger${isMenuOpen ? ' is-x' : ''}`} aria-hidden="true">
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {isMenuOpen ? (
+        <div id="site-menu" ref={menuRef} className="at-menu" role="dialog" aria-modal="true" aria-label="Site menu">
+          <nav className="at-menu__nav" aria-label="Primary">
+            <ol className="at-menu__list">
+              {NAV_LINKS.map((link, index) => (
+                <li key={link.id}>
+                  <Link
+                    to={linkTarget(link)}
+                    onClick={(event) => handleNavClick(event, link.hash)}
+                    onMouseEnter={() => setMenuVariant(MENU_VARIANT[link.id] ?? 'hero')}
+                    onFocus={() => setMenuVariant(MENU_VARIANT[link.id] ?? 'hero')}
+                    className="at-menu__link"
+                    style={{ '--i': index }}
+                    aria-current={isLinkActive(link) ? (onHome ? 'location' : 'page') : undefined}
+                  >
+                    <span className="at-menu__num" aria-hidden="true">
+                      {pad(index + 1)}
+                    </span>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ol>
           </nav>
 
-          <div className="flex items-center gap-3 md:hidden">
-            <ToggleTheme className={themeToggleClass} />
-            <button
-              type="button"
-              onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className={`interactive-tap min-h-11 min-w-11 px-2 text-xs uppercase tracking-widest transition-colors duration-200 ${navLinkBase}`}
-              aria-label="Toggle menu"
-              aria-expanded={isMobileOpen}
-            >
-              {isMobileOpen ? 'Close' : 'Menu'}
-            </button>
+          <div className="at-menu__art" aria-hidden="true">
+            <VaultPoster variant={menuVariant} />
+            <span className="at-menu__fig">Fig. — {menuVariant === 'door' ? 'AI unit, waving' : 'AI unit'}</span>
           </div>
-        </motion.div>
 
-        <AnimatePresence>
-          {isMobileOpen && (
-            <motion.nav
-              key="mobile-nav"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: MOTION_DURATION, ease: CINEMATIC_EASE }}
-              className={`pointer-events-auto mt-2 flex flex-col gap-1 overflow-hidden px-6 pb-6 pt-5 md:hidden border border-[var(--glass-border)] bg-[var(--bg-primary)]/95 shadow-lg nav-bar-glass ${
-                isScrolled ? 'rounded-3xl' : 'rounded-none border-t'
-              }`}
-            >
-              {NAV_LINKS.map((link) => (
-                <button
-                  key={link.id}
-                  type="button"
-                  onClick={() => scrollTo(link.id)}
-                  className={`interactive-tap min-h-11 rounded-lg py-2.5 pl-2 text-left text-sm uppercase tracking-[0.15em] transition-colors duration-200 active:opacity-80 ${
-                    activeId === link.id
-                      ? 'text-[#ff6b00]'
-                      : 'text-[var(--text-primary)]'
-                  }`}
-                  aria-current={activeId === link.id ? 'true' : undefined}
-                >
-                  {link.label}
-                </button>
+          <div className="at-menu__foot">
+            <a href={MAILTO}>hello@northvaultstudios.com</a>
+            <span>Chandigarh, India</span>
+            <span className="at-menu__social">
+              {SOCIAL_LINKS.map(({ name, url }) => (
+                <a key={name} href={url} target="_blank" rel="noopener noreferrer">
+                  {name}
+                  <ArrowUpRight aria-hidden="true" size={14} />
+                </a>
               ))}
-            </motion.nav>
-          )}
-        </AnimatePresence>
-      </motion.div>
+            </span>
+          </div>
+        </div>
+      ) : null}
     </header>
   )
 })

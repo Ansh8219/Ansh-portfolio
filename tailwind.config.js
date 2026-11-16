@@ -17,8 +17,8 @@ export default {
         'glass-white': 'rgba(255, 255, 255, 0.1)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Unbounded', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        display: ['Syne', 'DM Sans', 'system-ui', 'sans-serif'],
       },
       backdropBlur: {
         xs: '2px',

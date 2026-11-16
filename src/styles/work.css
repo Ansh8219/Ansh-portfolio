@@ -1,0 +1,143 @@
+/* ─────────────────────────────────────────────────────────────
+   /work: text-only case studies. Uses the shared tokens and the PageFx data-fx motion.
+   Left column is sticky on desktop; everything stacks on small screens.
+   ───────────────────────────────────────────────────────────── */
+.wk-hero { min-height: min(72svh, 44rem); }
+
+.wk-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: clamp(2rem, 5vw, 4rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.wk-index a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 1.1rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.wk-index a span { color: var(--accent); }
+.wk-index a:hover,
+.wk-index a:focus-visible { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.wk-index a:hover span,
+.wk-index a:focus-visible span { color: inherit; }
+
+/* moving names */
+.wk-ticker {
+  overflow: hidden;
+  padding-block: clamp(1.2rem, 3vw, 2.5rem);
+  border-block: 1px solid var(--rule);
+}
+.wk-ticker__track { display: flex; width: max-content; will-change: transform; }
+.wk-ticker__half { display: flex; flex: none; }
+.wk-ticker__half span {
+  padding-inline: clamp(1.5rem, 4vw, 4rem);
+  font-weight: 600;
+  font-size: clamp(3.5rem, 11vw, 11rem);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--rule-strong);
+  white-space: nowrap;
+}
+.wk-ticker__half span::after {
+  content: '';
+  display: inline-block;
+  width: 0.18em;
+  height: 0.18em;
+  margin-left: clamp(1.5rem, 4vw, 4rem);
+  background: var(--accent);
+}
+
+/* compact project rows: one line each, details open on demand */
+.wk-list { padding-block: clamp(2rem, 5vw, 4rem); }
+.wk-rows { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule-strong); }
+.wk-row { --hue: var(--c, var(--accent)); border-bottom: 1px solid var(--rule-strong); scroll-margin-top: calc(var(--nav-h) + 1rem); }
+.wk-row__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.5rem 1.2rem;
+  align-items: center;
+  width: 100%;
+  padding: clamp(1.2rem, 2.4vw, 2rem) 0 0.4rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.wk-row__n { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--hue); }
+.wk-row__main { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.wk-row__title {
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5.6vw, 5.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  overflow-wrap: anywhere;
+  transition: color 0.25s, translate 0.35s var(--ease-out, ease);
+}
+.wk-row__head:hover .wk-row__title,
+.wk-row.is-open .wk-row__title { color: var(--accent); translate: 0.4rem 0; }
+.wk-row__cat { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--text-dim); }
+.wk-badge,
+.wk-row__cta { grid-column: 2; justify-self: start; }
+.wk-badge {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.wk-badge--live { border-color: var(--h-web); color: var(--h-web); }
+.wk-badge--soon { border-color: var(--accent); color: var(--text-accent-ink); }
+.wk-badge--built { border-style: dashed; }
+.wk-row__cta { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.8125rem; }
+.wk-row__plus { transition: rotate 0.35s var(--ease-out, ease); color: var(--accent); }
+.wk-row.is-open .wk-row__plus { rotate: 45deg; }
+@media (min-width: 900px) {
+  .wk-row__head { grid-template-columns: 3rem minmax(0, 1fr) auto 9.5rem; }
+  .wk-badge, .wk-row__cta { grid-column: auto; justify-self: end; }
+}
+.wk-row__head:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 4px; }
+.wk-row__summary { margin: 0; padding: 0.4rem 0 clamp(1.2rem, 2.4vw, 2rem); max-width: 46rem; color: var(--text-secondary); font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.5; }
+@media (min-width: 900px) { .wk-row__summary { padding-left: calc(3rem + 1.2rem); } }
+
+/* detail panel: animates height (grid rows), hidden from tab order when closed */
+.wk-panel { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows 0.55s var(--ease-out, ease), visibility 0s 0.55s; }
+.wk-row.is-open .wk-panel { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows 0.55s var(--ease-out, ease); }
+.wk-panel__clip { overflow: hidden; min-height: 0; }
+.wk-panel__body { display: grid; gap: 1.6rem 3rem; padding: 0 0 clamp(1.8rem, 3vw, 2.8rem); opacity: 0; translate: 0 14px; transition: opacity 0.4s 0.1s, translate 0.5s 0.1s var(--ease-out, ease); }
+.wk-row.is-open .wk-panel__body { opacity: 1; translate: 0 0; }
+@media (min-width: 900px) {
+  .wk-panel__body { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); padding-left: calc(3rem + 1.2rem); }
+  .wk-panel__about, .wk-links { grid-column: 1 / -1; }
+}
+.wk-panel__about { margin: 0; max-width: 52rem; font-size: clamp(1.05rem, 1.5vw, 1.3rem); line-height: 1.5; letter-spacing: -0.01em; }
+.wk-col__h { margin: 0 0 0.7rem; font-family: var(--font-mono); font-weight: 400; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim); }
+.wk-col__h:not(:first-child) { margin-top: 1.4rem; }
+.wk-parts, .wk-plain, .wk-chips, .wk-links { margin: 0; padding: 0; list-style: none; }
+.wk-parts { display: grid; gap: 0.9rem; }
+.wk-parts li { display: grid; gap: 0.15rem; padding-left: 0.9rem; border-left: 2px solid var(--hue); }
+.wk-parts b { font-weight: 600; font-size: 1.05rem; letter-spacing: -0.02em; }
+.wk-parts span { color: var(--text-secondary); line-height: 1.45; }
+.wk-plain { display: grid; gap: 0.3rem; color: var(--text-secondary); }
+.wk-plain li::before { content: '→ '; color: var(--accent); }
+.wk-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.wk-chips li { padding: 0.35rem 0.75rem; border: 1px solid var(--rule-strong); border-radius: 999px; font-size: 0.9rem; }
+.wk-chips--mono li { border-radius: 6px; border-color: var(--rule); font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); }
+.wk-links { display: flex; flex-wrap: wrap; gap: 0.6rem 1.8rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wk-panel, .wk-panel__body, .wk-row__title, .wk-row__plus { transition: none; }
+}

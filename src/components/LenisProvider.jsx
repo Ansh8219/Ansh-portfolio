@@ -29,7 +29,8 @@ export default function LenisProvider({ children }) {
       touchMultiplier: 1,
       syncTouch: true,
       syncTouchLerp: 0.1,
-      autoRaf: true,
+      // Driven by GSAP's ticker below, so scroll position and ScrollTrigger update in the same frame.
+      autoRaf: false,
       // Prevent overscroll bounce from triggering extra work/layout during inertial scroll.
       overscroll: false,
     })
@@ -40,11 +41,16 @@ export default function LenisProvider({ children }) {
 
     const onScroll = () => ScrollTrigger.update()
     lenis.on('scroll', onScroll)
+    const tick = (time) => lenis.raf(time * 1000)
+    gsap.ticker.add(tick)
+    // No catch-up jumps after a slow frame: they read as lag in pinned sections.
+    gsap.ticker.lagSmoothing(0)
     requestAnimationFrame(() => ScrollTrigger.refresh())
 
     const onReducedMotionChange = (event) => {
       if (event.matches) {
         lenis.off('scroll', onScroll)
+        gsap.ticker.remove(tick)
         lenis.destroy()
         lenisRef.current = null
         setLenisInstance(null)
@@ -55,6 +61,8 @@ export default function LenisProvider({ children }) {
     return () => {
       reducedMotion.removeEventListener('change', onReducedMotionChange)
       lenis.off('scroll', onScroll)
+      gsap.ticker.remove(tick)
+      gsap.ticker.lagSmoothing(500, 33)
       document.documentElement.classList.remove('lenis-ready')
       lenis.destroy()
       lenisRef.current = null

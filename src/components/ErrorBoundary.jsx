@@ -27,17 +27,18 @@ class ErrorBoundary extends Component {
             </p>
             <div className="flex gap-4 justify-center">
               <button
+                type="button"
                 onClick={() => window.location.reload()}
                 className="px-6 py-3 rounded-lg bg-primary text-bg-primary font-semibold hover:opacity-90 transition-opacity"
               >
                 Refresh Page
               </button>
-              <button
-                onClick={() => window.location.href = '/'}
+              <a
+                href="/"
                 className="px-6 py-3 rounded-lg glass text-primary font-semibold hover:opacity-90 transition-opacity"
               >
                 Go Home
-              </button>
+              </a>
             </div>
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mt-8 text-left max-w-2xl mx-auto">

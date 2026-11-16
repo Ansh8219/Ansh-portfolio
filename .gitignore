@@ -23,3 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 
+
+# local scratch / backups (not part of the site)
+redesign-backup/
+redesign-screenshots/
+audit-screenshots/
+graphify-out/
+.claude/
+*.mp4
+!public/**/*.mp4

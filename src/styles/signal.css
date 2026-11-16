@@ -1,0 +1,197 @@
+/* ─────────────────────────────────────────────────────────────
+   Signal Poster design system (dark-first)
+   Loaded after index.css; these rules intentionally override the legacy tokens so the
+   not-yet-redesigned pages (About, Services, Contact, 404) pick up the new palette and fonts.
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Tokens ─────────────────────────────────────────────────── */
+:root,
+.dark {
+  color-scheme: dark;
+
+  --ink: #0e0f14;
+  --paper: #f1f2f4;
+  --cobalt: #2f3bff;
+  --tangerine: #ff6a13;
+  --lilac: #c9b8ff;
+  --chartreuse: #d6f26b;
+  --rose: #ff9ec4;
+  --sky: #8fd0ff;
+
+  --bg-primary: #0e0f14;
+  --bg-secondary: #171821;
+  --section-muted: #0e0f14;
+  --text-primary: #f1f2f4;
+  --text-secondary: rgba(241, 242, 244, 0.74);
+  --text-accent: #ff6a13;
+  --text-accent-ink: #ff6a13;
+  --glass-bg: rgba(241, 242, 244, 0.05);
+  --glass-border: rgba(241, 242, 244, 0.16);
+  --glass-glow: rgba(255, 106, 19, 0.12);
+  --nav-bar-scrolled: rgba(14, 15, 20, 0.94);
+
+  /* structural line (borders on the page background) and the line used on coloured blocks */
+  --line: #f1f2f4;
+  --block-line: #0e0f14;
+  --block-shadow: #f1f2f4;
+  --underline: #ff6a13;
+}
+
+.light {
+  color-scheme: light;
+
+  --bg-primary: #f1f2f4;
+  --bg-secondary: #e4e6ea;
+  --section-muted: #f1f2f4;
+  --text-primary: #0e0f14;
+  --text-secondary: rgba(14, 15, 20, 0.74);
+  --text-accent: #ff6a13;
+  --text-accent-ink: #b83e00;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(14, 15, 20, 0.16);
+  --glass-glow: rgba(255, 106, 19, 0.1);
+  --nav-bar-scrolled: rgba(241, 242, 244, 0.94);
+
+  --line: #0e0f14;
+  --block-line: #0e0f14;
+  --block-shadow: #0e0f14;
+  --underline: #2f3bff;
+}
+
+:root {
+  --font-display: 'Syne', 'DM Sans', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --nav-h: 4.5rem;
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  --section-y: clamp(4.5rem, 10vw, 9rem);
+  --ease-poster: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Each service owns one accent: --c is the fill, --on is the readable text colour on it. */
+.d-ai {
+  --c: var(--lilac);
+  --on: var(--ink);
+}
+.d-software {
+  --c: var(--cobalt);
+  --on: var(--paper);
+}
+.d-web {
+  --c: var(--rose);
+  --on: var(--ink);
+}
+.d-cloud {
+  --c: var(--sky);
+  --on: var(--ink);
+}
+.d-data {
+  --c: var(--chartreuse);
+  --on: var(--ink);
+}
+.d-brand {
+  --c: var(--tangerine);
+  --on: var(--ink);
+}
+
+/* A coloured block: its focus ring uses the block's own text colour so it always contrasts. */
+
+/* ── Base type & focus ──────────────────────────────────────── */
+body {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+section[id] {
+  scroll-margin-top: var(--nav-h);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring, var(--text-primary));
+  outline-offset: 3px;
+}
+
+/* SplitText line wrapper: a little vertical room so descenders aren't clipped by the mask. */
+.sp-line {
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+}
+
+/* ── Buttons & links (no movement on hover: colour only) ─────── */
+
+/* ── Navbar ─────────────────────────────────────────────────── */
+
+/* Theme toggle sits in the nav with the same 2px line language. */
+
+/* ── Hero ───────────────────────────────────────────────────── */
+
+/* Revealed statement. In flow by default; layered under the bands when the hero is pinned. */
+
+/* Desktop pinned mode (class added by GSAP only when motion is allowed). */
+
+@media (min-width: 768px) {
+
+  /* Starts below the first band so the longest line ("We Engineer") is never covered. */
+}
+
+/* Pre-hydration guard (class set by the inline script in index.html; never when reduced motion). */
+
+/* ── Marquee ────────────────────────────────────────────────── */
+
+/* ── Story ──────────────────────────────────────────────────── */
+
+.sp-word {
+  display: inline-block;
+}
+
+/* ── Service cards (sticky stack) ───────────────────────────── */
+
+/* The source art has copy and logos baked into its left third. Cropping to the right/middle keeps
+   the devices and scenery and keeps that text out of view. */
+
+/* ── Work gallery ───────────────────────────────────────────── */
+
+/* Desktop pinned mode (class added by GSAP only when motion is allowed). */
+
+/* ── Stack ──────────────────────────────────────────────────── */
+
+/* ── Why ────────────────────────────────────────────────────── */
+
+/* ── Contact ────────────────────────────────────────────────── */
+
+/* ── Footer ─────────────────────────────────────────────────── */
+
+/* ── Page transition ────────────────────────────────────────── */
+
+/* ── Legacy pages (until their phase): no handwriting, new palette ── */
+.handwrite-accent {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  transform: none;
+  text-shadow: none;
+  color: var(--text-primary);
+}
+
+.handwrite-accent--soft {
+  color: var(--text-secondary);
+  text-shadow: none;
+}
+
+.light .handwrite-accent,
+.light .handwrite-accent--soft {
+  text-shadow: none;
+}
+
+.branded-email {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ── Reduced motion: static layout, nothing moves ───────────── */

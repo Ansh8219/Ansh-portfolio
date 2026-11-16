@@ -4,36 +4,56 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/mainPage.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="description" content="NorthVaultStudios - Shaping the Future of Digital Experiences. We provide Marketing & Branding, Website Development, Mobile Apps, Full IT Solutions, and Social Media Management." />
-    <meta name="keywords" content="digital agency, web development, mobile apps, marketing, branding, IT solutions, social media management" />
+    <meta name="theme-color" content="#0A0B10" />
+    <meta name="keywords" content="digital engineering, AI solutions, AI agents, RAG, software development, web development, mobile apps, cloud, DevOps, data engineering, branding, digital marketing, social media management" />
     <meta name="author" content="NorthVaultStudios" />
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="NorthVaultStudios - Shaping the Future of Digital Experiences" />
-    <meta property="og:description" content="Futuristic digital agency specializing in Marketing, Web Development, Mobile Apps, and IT Solutions." />
-    <meta property="og:site_name" content="NorthVaultStudios" />
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="NorthVaultStudios - Shaping the Future of Digital Experiences" />
-    <meta property="twitter:description" content="Futuristic digital agency specializing in Marketing, Web Development, Mobile Apps, and IT Solutions." />
-    
-    
-    <title>NorthVaultStudios - Shaping the Future of Digital Experiences</title>
-    
+    <!--
+      Per-route <title>, description, canonical, Open Graph, Twitter and JSON-LD tags are
+      generated at build time from src/seo/ (see scripts/prerender.mjs) and injected here.
+      In `vite dev` this stays empty and <SeoManager/> fills the tags in on the client.
+    -->
+    <!--seo-head-->
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Unbounded:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <link rel="preload" as="image" href="/updated/hero-character.png" type="image/png" />
-    <link rel="preload" as="image" href="/updated/hero-character-light.png" type="image/png" />
-    <link rel="preload" as="image" href="/homePageImage.webp" type="image/webp" />
-    <link rel="preload" as="image" href="/ourServices/websitedev_icon.webp" type="image/webp" />
+    <!--
+      Runs before first paint, outside React (so it cannot cause a hydration mismatch):
+      - applies the saved theme class (dark is the default),
+      - adds `js-motion` (only when motion is allowed) so the hero's entrance starts from a hidden
+        state instead of flashing. The guard is removed by the hero once GSAP owns the start
+        state, and by a 4s failsafe, so content can never stay hidden.
+    -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        try {
+          var t = localStorage.getItem('nvs-theme');
+          d.classList.add(t === 'light' ? 'light' : 'dark');
+          if (t === 'light') {
+            var m = document.querySelector('meta[name="theme-color"]');
+            if (m) m.setAttribute('content', '#EFEBE2');
+          }
+        } catch (e) { d.classList.add('dark'); }
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          d.classList.add('js-motion');
+          setTimeout(function () { d.classList.remove('js-motion'); }, 4000);
+        }
+      })();
+    </script>
+
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--app-html--></div>
+    <noscript>
+      <style>
+        .intro-splash { display: none !important; }
+        .page-root { opacity: 1 !important; }
+      </style>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

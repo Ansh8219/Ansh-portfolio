@@ -3,14 +3,6 @@ import { flushSync } from 'react-dom'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 
-const VIEW_TRANSITION_RESET = `
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-`
-
 export default function ToggleTheme({ className = '', duration = 400, ...props }) {
   const { theme, toggleTheme } = useTheme()
   const isDark = theme === 'dark'
@@ -54,18 +46,19 @@ export default function ToggleTheme({ className = '', duration = 400, ...props }
   }, [toggleTheme, duration])
 
   return (
-    <>
-      <button
-        ref={buttonRef}
-        type="button"
-        onClick={handleToggle}
-        className={`interactive-tap flex h-9 w-9 items-center justify-center rounded-full border border-[var(--glass-border)] text-[var(--text-primary)] transition-[color,border-color,transform] duration-200 hover:border-[var(--text-accent)] hover:text-[var(--text-accent)] active:scale-95 ${className}`}
-        aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-        {...props}
-      >
-        {isDark ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
-      </button>
-      <style dangerouslySetInnerHTML={{ __html: VIEW_TRANSITION_RESET }} />
-    </>
+    <button
+      {...props}
+      ref={buttonRef}
+      type="button"
+      onClick={handleToggle}
+      className={`interactive-tap flex h-11 w-11 items-center justify-center rounded-full border border-[var(--glass-border)] text-[var(--text-primary)] transition-[color,border-color,transform] duration-200 hover:border-[var(--text-accent)] hover:text-[var(--text-accent)] active:scale-95 ${className}`}
+      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+    >
+      {isDark ? (
+        <Sun className="h-[18px] w-[18px]" aria-hidden="true" />
+      ) : (
+        <Moon className="h-[18px] w-[18px]" aria-hidden="true" />
+      )}
+    </button>
   )
 }
