@@ -6,7 +6,7 @@ import SectionLabel from './SectionLabel'
 /** Home teaser that sends visitors to the full resume page. */
 function ResumeAtlas() {
   return (
-    <section id="resume" className="at-section at-ap-cta" aria-labelledby="resume-title">
+    <section id="resume" className="at-section at-ap-cta at-resume" aria-labelledby="resume-title">
       <div className="at-wrap">
         <SectionLabel>Resume</SectionLabel>
         <h2 id="resume-title" className="at-ap-cta__title">

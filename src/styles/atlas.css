@@ -3050,3 +3050,10 @@ main#main.is-opaque > * {
   .at-work.is-pinned .wp-parts span { display: none; }
   .at-work.is-pinned .wp-main { gap: 0.6rem; }
 }
+
+/* Resume teaser: opaque, so the fixed footer never shows through it */
+.at-resume {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-primary);
+}

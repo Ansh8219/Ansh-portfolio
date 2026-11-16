@@ -17,8 +17,8 @@ const Home = () => (
     <StoryAtlas />
     <ServicesAtlas />
     <WorkAtlas />
-    <OneTeamAtlas />
     <ResumeAtlas />
+    <OneTeamAtlas />
   </div>
 )
 
